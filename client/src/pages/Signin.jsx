@@ -1,35 +1,41 @@
-import { Link , useNavigate} from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react'
 import { useState } from 'react'
+import {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+} from '../redux/user/userSlice'
+import { useDispatch, useSelector } from 'react-redux'
 
 function Signin() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
-  const [errorMessage, setErrorMessage] = useState(null)
-  const [loading, setLoading] = useState(false)
+  const dispatch = useDispatch()
+  const {loading, error:errorMessage} = useSelector(state=>state.user)
 
-  const navigate = useNavigate();
-
+  const navigate = useNavigate()
 
   const handleSubmit = async e => {
     e.preventDefault()
 
-    if (!email || !password) {
-      return setErrorMessage('Please fill out all fields')
-    }
-
-   
+    
 
     const formData = {
       email: email,
       password: password,
     }
+    if(!formData.email || !formData.password){
+      dispatch(signInFailure('All fields are required.'))
+    }
+
+    
     console.log(formData)
 
     try {
-      setLoading(true)
-      setErrorMessage(null)
+      dispatch(signInStart())
+
       console.log(formData)
       const res = await fetch('http://localhost:3000/api/auth/signin', {
         method: 'POST',
@@ -41,16 +47,15 @@ function Signin() {
       })
       const data = await res.json()
       if (data.success === false) {
-        return setErrorMessage(data.message)
+        return dispatch(signInFailure(data.message));
       }
-      setLoading(false)
 
-      if(res.ok){
+      if (res.ok) {
+        dispatch(signInSuccess(data));
         navigate('/')
       }
     } catch (error) {
-      setErrorMessage(error.message)
-      setLoading(false)
+      dispatch(signInFailure(error.message))
     }
   }
 
@@ -135,4 +140,4 @@ function Signin() {
   )
 }
 
-export default Signin;
+export default Signin
