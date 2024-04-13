@@ -17,7 +17,7 @@ function Signin() {
 
   const navigate = useNavigate()
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
     
@@ -119,7 +119,7 @@ function Signin() {
                   <span className='pl-3'>Loading...</span>
                 </>
               ) : (
-                'Sign Up'
+                'Sign In'
               )}
             </Button>
           </form>
