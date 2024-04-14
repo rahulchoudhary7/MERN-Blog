@@ -1,6 +1,6 @@
 import { Button } from 'flowbite-react'
 import { AiFillGoogleCircle } from 'react-icons/ai'
-import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth'
+import { GoogleAuthProvider, getAuth, getRedirectResult, signInWithPopup, signInWithRedirect } from 'firebase/auth'
 import { app } from '../firebase'
 import { useDispatch, useSelector } from 'react-redux'
 import {signInSuccess} from '../redux/user/userSlice'
@@ -20,6 +20,7 @@ export default function OAuth() {
 
         try {
         const resultFromGoogle = await signInWithPopup(auth, provider)
+        // const resultFromGoogle = await signInWithRedirect(auth, provider);
 
         const res = await fetch('/api/auth/google', {
             method: 'POST',
