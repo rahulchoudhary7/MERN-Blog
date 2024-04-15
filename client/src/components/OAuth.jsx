@@ -1,45 +1,45 @@
 import { Button } from 'flowbite-react'
 import { AiFillGoogleCircle } from 'react-icons/ai'
-import { GoogleAuthProvider, getAuth, getRedirectResult, signInWithPopup, signInWithRedirect } from 'firebase/auth'
+import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth'
 import { app } from '../firebase'
-import { useDispatch, useSelector } from 'react-redux'
-import {signInSuccess} from '../redux/user/userSlice'
-import {useNavigate} from 'react-router-dom';
+import { useDispatch } from 'react-redux'
+import { signInSuccess } from '../redux/user/userSlice'
+import { useNavigate } from 'react-router-dom'
 
 export default function OAuth() {
-    const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
-    const navigate = useNavigate();
+  const navigate = useNavigate()
 
+  const auth = getAuth(app)
+  const handleGoogleClick = async () => {
+    const provider = new GoogleAuthProvider()
 
-    const auth = getAuth(app)
-    const handleGoogleClick = async () => {
-        const provider = new GoogleAuthProvider()
+    provider.setCustomParameters({ prompt: 'select_account' })
 
-        provider.setCustomParameters({ prompt: 'select_account' })
+    try {
+      const resultFromGoogle = await signInWithPopup(auth, provider)
+      // const resultFromGoogle = await signInWithRedirect(auth, provider);
+      console.log(resultFromGoogle.user.googlePhotoUrl)
 
-        try {
-        const resultFromGoogle = await signInWithPopup(auth, provider)
-        // const resultFromGoogle = await signInWithRedirect(auth, provider);
+      const res = await fetch('/api/auth/google', {
+        method: 'POST',
+        headers: { 'Content-Type': 'Application/json' },
+        body: JSON.stringify({
+          name: resultFromGoogle.user.displayName,
+          email: resultFromGoogle.user.email,
+          googlePhotoUrl: resultFromGoogle.user.photoURL,
+        }),
+      })
+      const data = await res.json()
 
-        const res = await fetch('/api/auth/google', {
-            method: 'POST',
-            headers: { 'Content-Type': 'Application/json' },
-            body: JSON.stringify({
-            name: resultFromGoogle.user.displayName,
-            email: resultFromGoogle.user.email,
-            googlePhotoUrl: resultFromGoogle.user.photoURL,
-            }),
-        })
-        const data = await res.json()
-
-        if (res.ok) {
-            dispatch(signInSuccess(data));
-            navigate('/');
-        }
-        } catch (error) {
-            console.log(error)
-        }
+      if (res.ok) {
+        dispatch(signInSuccess(data))
+        navigate('/')
+      }
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
