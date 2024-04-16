@@ -28,6 +28,8 @@ export const signup = asyncHandler(async (req, res, next) => {
 export const signin = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body
 
+  console.log("hello yaar sign in function chal raha hai kya??");
+
   if (!email || !password || email === null || password === null) {
     next(errorHandler(400, 'All fields are required'))
   }

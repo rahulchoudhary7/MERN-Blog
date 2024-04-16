@@ -4,41 +4,38 @@ import dotenv from 'dotenv'
 import userRoutes from './routes/user.route.js'
 import authRoutes from './routes/auth.route.js'
 import cors from 'cors'
-
-
-
+import cookieParser from 'cookie-parser'
 
 dotenv.config({ path: '../.env' })
 
 try {
-    await mongoose.connect(process.env.MONGO_STRING);
-    console.log("database connected")
+    await mongoose.connect(process.env.MONGO_STRING)
+    console.log('database connected')
 } catch (error) {
-    console.log(error);
+    console.log(error)
 }
 
-const app = express();
-app.use(express.json());
+const app = express()
+app.use(express.json())
+
+app.use(cookieParser())
 
 app.listen(3000, () => {
-  console.log('Server is running on port 3000!!')
+    console.log('Server is running on port 3000!!')
 })
-app.use(cors({ origin: 'http://localhost:5173' }));
+app.use(cors({ origin: 'http://localhost:5173' }))
 
-app.use('/api/user', userRoutes);
-app.use('/api/auth', authRoutes);
+app.use('/api/user', userRoutes)
+app.use('/api/auth', authRoutes)
 
+app.use((err, req, res, next) => {
+    const statusCode = err.statusCode || 500
 
-app.use((err, req, res, next)=>{
-  const statusCode = err.statusCode || 500;
+    const message = err.message || 'Internal server error'
 
-  const message = err.message || "Internal server error";
-
-  res.status(statusCode).json({
-    success: false,
-    statusCode,
-    message,
-  });
-
-
-});
+    res.status(statusCode).json({
+        success: false,
+        statusCode,
+        message,
+    })
+})

@@ -32,7 +32,6 @@ function Signin() {
     }
 
     
-    console.log(formData)
 
     try {
       dispatch(signInStart())
