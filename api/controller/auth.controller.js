@@ -60,7 +60,7 @@ export const signin = asyncHandler(async (req, res, next) => {
 })
 
 export const google = asyncHandler(async (req, res, next) => {
-  const { email, name, googlephotoUrl } = req.body
+  const { email, name, googlePhotoUrl } = req.body
 
   const user = await User.findOne({ email })
 
@@ -85,7 +85,7 @@ export const google = asyncHandler(async (req, res, next) => {
         Math.random().toString(9).slice(-4),
       email,
       password: hashedPassword,
-      profilePicture: googlephotoUrl,
+      profilePicture: googlePhotoUrl,
     })
     
 

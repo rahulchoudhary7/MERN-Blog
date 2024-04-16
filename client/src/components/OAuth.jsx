@@ -20,7 +20,9 @@ export default function OAuth() {
     try {
       const resultFromGoogle = await signInWithPopup(auth, provider)
       // const resultFromGoogle = await signInWithRedirect(auth, provider);
-      console.log(resultFromGoogle.user.googlePhotoUrl)
+      //check out how to do sign in with redirect from firebase;
+      console.log(resultFromGoogle.user)
+      console.log(resultFromGoogle.user.photoURL)
 
       const res = await fetch('/api/auth/google', {
         method: 'POST',
@@ -50,7 +52,7 @@ export default function OAuth() {
       onClick={handleGoogleClick}
     >
       <AiFillGoogleCircle className='w-6 h-6 mr-2' />
-      Continue with Google
+          Continue with Google
     </Button>
   )
 }
