@@ -44,7 +44,6 @@ export const updateUser = asyncHandler(async (req, res, next) => {
                 ),
             )
         }
-
     }
 
     const updatedUser = await User.findByIdAndUpdate(
@@ -59,16 +58,20 @@ export const updateUser = asyncHandler(async (req, res, next) => {
         },
         { new: true },
     )
-    
+
     const { password, ...rest } = updatedUser._doc
     res.status(200).json(rest)
 })
 
-export const deleteUser = asyncHandler(async(req, res, next)=>{
+export const deleteUser = asyncHandler(async (req, res, next) => {
     if (req.user.id !== req.params.userId) {
         return next(errorHandler(403, 'You are not authorized'))
     }
 
-    await User.findByIdAndDelete(req.params.userId);
-    res.status(200).json("User has been deleted")
+    await User.findByIdAndDelete(req.params.userId)
+    res.status(200).json('User has been deleted')
+})
+
+export const signout = asyncHandler(async (req, res, next) => {
+    res.clearCookie('accessToken').status(200).json('Signed out successfully')
 })
