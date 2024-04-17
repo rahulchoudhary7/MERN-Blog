@@ -120,7 +120,7 @@ export default function DashProfile() {
             key => formData[key] !== currentUser[key],
         )
 
-        if (!isFormDataChanged && !imageFileUploading) {
+        if (!isFormDataChanged) {
             setUpdateUserError('No changes were detected')
             return
         }
@@ -177,20 +177,20 @@ export default function DashProfile() {
         }
     }
 
-    const handleSignOut = async ()=>{
+    const handleSignOut = async () => {
         try {
-            const res = await fetch ('/api/user/signout', {
-                method: 'POST'
+            const res = await fetch('/api/user/signout', {
+                method: 'POST',
             })
-            const data = await res.json();
+            const data = await res.json()
 
-            if(!res.ok){
-                console.log(data.message);
-            }else{
-                dispatch(signoutSuccess());
+            if (!res.ok) {
+                console.log(data.message)
+            } else {
+                dispatch(signoutSuccess())
             }
         } catch (error) {
-            console.log(error.message);
+            console.log(error.message)
         }
     }
 
