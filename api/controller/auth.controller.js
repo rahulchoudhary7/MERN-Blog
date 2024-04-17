@@ -33,7 +33,7 @@ export const signin = asyncHandler(async (req, res, next) => {
     }
 
     const validUser = await User.findOne({ email })
-    console.log(validUser)
+
     if (!validUser) {
         return next(errorHandler(404, 'Email or Password not correct email'))
     }
@@ -41,7 +41,7 @@ export const signin = asyncHandler(async (req, res, next) => {
     const validPassword = bcryptjs.compareSync(password, validUser.password)
 
     if (!validPassword) {
-        return next(errorHandler(400, 'Email or Password not correct password'))
+        return next(errorHandler(400, 'Email or Password not correct'))
     }
     //separating password from the rest of the validUser object
     const { password: pass, ...rest } = validUser._doc
