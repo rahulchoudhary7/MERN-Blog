@@ -55,57 +55,65 @@ export default function DashProfile() {
     }, [imageFile])
 
     const uploadImage = async () => {
-        // Ensure imageFile is not null
-        if (!imageFile) {
-            setImageFileUploadError('No file selected')
-            return
-        }
+        try {
+            if (!imageFile) {
+                setImageFileUploadError('No file selected')
+                return
+            }
 
-        // Validate file size and type
-        if (
-            imageFile.size > 2 * 1024 * 1024 ||
-            !imageFile.type.startsWith('image/')
-        ) {
-            setImageFileUploadError(
-                'File must be less than 2MB and of type image',
-            )
-            setImageFile(null)
-            setImageFileUrl(null)
-            setImageFileUploadProgress(null)
-            return
-        }
-
-        // Proceed with uploading the file
-        setImageFileUploadError(null)
-        setImageFileUploading(true)
-        const storage = getStorage(app)
-        const fileName = new Date().getTime() + imageFile.name
-        const storageRef = ref(storage, fileName)
-        const uploadTask = uploadBytesResumable(storageRef, imageFile)
-
-        uploadTask.on(
-            'state_changed',
-            snapshot => {
-                const progress =
-                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-                setImageFileUploadProgress(progress.toFixed(0))
-            },
-            error => {
-                setImageFileUploadError('Could not upload image')
-                setImageFileUploadProgress(null)
+            // Validate file size and type
+            if (
+                imageFile.size > 2 * 1024 * 1024 ||
+                !imageFile.type.startsWith('image/')
+            ) {
+                setImageFileUploadError(
+                    'File must be less than 2MB and of type image',
+                )
                 setImageFile(null)
                 setImageFileUrl(null)
-                setImageFileUploading(false)
-            },
-            () => {
-                getDownloadURL(uploadTask.snapshot.ref).then(downloadURL => {
-                    setImageFileUrl(downloadURL)
-                    setFormData({ ...formData, profilePicture: downloadURL })
-                    setImageFileUploading(false)
-                })
                 setImageFileUploadProgress(null)
-            },
-        )
+                return
+            }
+
+            // Proceed with uploading the file
+            setImageFileUploadError(null)
+            setImageFileUploading(true)
+            const storage = getStorage(app)
+            const fileName = new Date().getTime() + imageFile.name
+            const storageRef = ref(storage, fileName)
+            const uploadTask = uploadBytesResumable(storageRef, imageFile)
+
+            uploadTask.on(
+                'state_changed',
+                snapshot => {
+                    const progress =
+                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                    setImageFileUploadProgress(progress.toFixed(0))
+                },
+                error => {
+                    setImageFileUploadError('Could not upload image')
+                    setImageFileUploadProgress(null)
+                    setImageFile(null)
+                    setImageFileUrl(null)
+                    setImageFileUploading(false)
+                },
+                () => {
+                    getDownloadURL(uploadTask.snapshot.ref).then(
+                        downloadURL => {
+                            setImageFileUrl(downloadURL)
+                            setImageFileUploadProgress(null)
+                            setFormData({
+                                ...formData,
+                                profilePicture: downloadURL,
+                            })
+                            setImageFileUploading(false)
+                        },
+                    )
+                },
+            )
+        } catch (error) {
+            setImageFileUploadError('Could not upload image')
+        }
     }
 
     const handleChange = e => {

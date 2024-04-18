@@ -33,12 +33,10 @@ function Signup() {
             email: email,
             password: password,
         }
-        console.log(formData)
 
         try {
             setLoading(true)
             setErrorMessage(null)
-            console.log(formData)
             const res = await fetch('http://localhost:3000/api/auth/signup', {
                 method: 'POST',
                 headers: {

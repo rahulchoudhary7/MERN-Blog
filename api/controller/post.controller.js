@@ -27,3 +27,4 @@ export const create = asyncHandler(async (req, res, next) => {
     const savedPost = await newPost.save()
     res.status(201).json(savedPost)
 })
+
