@@ -96,7 +96,7 @@ function Header() {
                         </Link>
                         <Dropdown.Divider />
                         <Dropdown.Item
-                            className='font-medium'
+                            className='font-medium text-red-500 dark:text-red-500 '
                             onClick={handleSignout}
                         >
                             Sign Out
