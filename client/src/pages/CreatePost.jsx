@@ -5,13 +5,14 @@ import {
     uploadBytesResumable,
 } from 'firebase/storage'
 import { Alert, Button, FileInput, Select, TextInput } from 'flowbite-react'
-import {  useState } from 'react'
+import { useState } from 'react'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import { useSelector } from 'react-redux'
 import { app } from '../firebase.js'
 import { CircularProgressbar } from 'react-circular-progressbar'
 import 'react-circular-progressbar/dist/styles.css'
+import { useNavigate } from 'react-router-dom'
 
 export default function CreatePost() {
     const { currentUser, loading, error } = useSelector(state => state.user)
@@ -22,8 +23,9 @@ export default function CreatePost() {
     const [imageFileUploadError, setImageFileUploadError] = useState(null)
     const [formData, setFormData] = useState({})
     const [imageFileUploading, setImageFileUploading] = useState(false)
+    const [publishError, setPublishError] = useState(null)
 
-   
+    const navigate = useNavigate()
 
     const handleUploadImage = async () => {
         try {
@@ -70,15 +72,41 @@ export default function CreatePost() {
                             setImageFileUploadProgress(null)
                             setImageFileUrl(downloadURL)
                             setImageFileUploading(false)
-                            setFormData({ ...formData, imageUrl: downloadURL })
+                            setFormData({ ...formData, image: downloadURL })
                             console.log(downloadURL)
                         },
-                        console.log(formData.imageUrl),
                     )
                 },
             )
         } catch (error) {
             setImageFileUploadError('Could not upload Image')
+        }
+    }
+
+    const handleSubmit = async e => {
+        e.preventDefault()
+
+        try {
+            const res = await fetch('/api/post/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'Application/json',
+                },
+                body: JSON.stringify(formData),
+            })
+
+            const data = await res.json()
+
+            if (!res.ok) {
+                setPublishError(data.message)
+                return
+            }
+            if (res.ok) {
+                setPublishError(null)
+                navigate(`/post/${data.slug}`)
+            }
+        } catch (error) {
+            setPublishError(error.message)
         }
     }
 
@@ -88,7 +116,7 @@ export default function CreatePost() {
                 Create a post
             </h1>
 
-            <form className='flex flex-col gap-4'>
+            <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
                 <div className='flex flex-col gap-4 sm:flex-row justify-between'>
                     <TextInput
                         type='text'
@@ -96,8 +124,21 @@ export default function CreatePost() {
                         required
                         id='title'
                         className='flex-1'
+                        onChange={e =>
+                            setFormData({
+                                ...formData,
+                                [e.target.id]: e.target.value,
+                            })
+                        }
                     />
-                    <Select>
+                    <Select
+                        onChange={e =>
+                            setFormData({
+                                ...formData,
+                                category: e.target.value,
+                            })
+                        }
+                    >
                         <option value={'uncategorized'}>---Select---</option>
                         <option value={'javascript'}>JavaScript</option>
                         <option value={'react'}>ReactJS</option>
@@ -136,9 +177,9 @@ export default function CreatePost() {
                         {imageFileUploadError}
                     </Alert>
                 )}
-                {formData.imageUrl && (
+                {formData.image && (
                     <img
-                        src={formData.imageUrl}
+                        src={formData.image}
                         alt='upload'
                         className='w-full h-72 object-cover'
                     />
@@ -148,10 +189,22 @@ export default function CreatePost() {
                     placeholder='write something'
                     className='h-72 mb-12'
                     required
+                    onChange={value =>
+                        setFormData({
+                            ...formData,
+                            content: value,
+                        })
+                    }
                 />
                 <Button type='submit' gradientDuoTone={'purpleToBlue'}>
                     Publish
                 </Button>
+
+                {publishError && (
+                    <Alert color={'failure'} className='mt-4'>
+                        {publishError}
+                    </Alert>
+                )}
             </form>
         </div>
     )
