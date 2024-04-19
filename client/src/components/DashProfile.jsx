@@ -24,7 +24,7 @@ import { HiOutlineExclamationCircle } from 'react-icons/hi'
 import { Link } from 'react-router-dom'
 
 export default function DashProfile() {
-    const { currentUser, loading, error } = useSelector(state => state.user)
+    const { currentUser, loading } = useSelector(state => state.user)
 
     const [imageFile, setImageFile] = useState(null)
     const [imageFileUrl, setImageFileUrl] = useState(null)
@@ -325,15 +325,6 @@ export default function DashProfile() {
                 </Alert>
             )}
 
-            {/* {error && (
-                <Alert
-                    color={'failure'}
-                    className='mt-5'
-                    onDismiss={() => setUpdateUserError(null)}
-                >
-                    {error}
-                </Alert>
-            )} */}
             <div className='text-red-500 flex justify-between mt-5'>
                 <span
                     onClick={() => setShowModal(true)}

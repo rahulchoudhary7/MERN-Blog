@@ -87,7 +87,7 @@ export default function CreatePost() {
         e.preventDefault()
 
         try {
-            const res = await fetch('/api/post/create', {
+            const res = await fetch('/api/post/createpost', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'Application/json',
@@ -140,9 +140,9 @@ export default function CreatePost() {
                         }
                     >
                         <option value={'uncategorized'}>---Select---</option>
-                        <option value={'javascript'}>JavaScript</option>
-                        <option value={'react'}>ReactJS</option>
-                        <option value={'next'}>NextJS</option>
+                        <option value={'JavaScript'}>JavaScript</option>
+                        <option value={'ReactJS'}>ReactJS</option>
+                        <option value={'NextJS'}>NextJS</option>
                     </Select>
                 </div>
 
@@ -195,8 +195,9 @@ export default function CreatePost() {
                             content: value,
                         })
                     }
+                    disabled={imageFileUploadProgress}
                 />
-                <Button type='submit' gradientDuoTone={'purpleToBlue'}>
+                <Button type='submit' gradientDuoTone={'purpleToBlue'} disabled={loading || imageFileUploadProgress}>
                     Publish
                 </Button>
 
