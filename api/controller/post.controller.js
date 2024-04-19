@@ -69,11 +69,31 @@ export const getposts = asyncHandler(async (req, res, next) => {
     })
 })
 
-export const deletepost = asyncHandler(async(req, res,next)=>{
-    if(!req.user.isAdmin || req.user.id !== req.params.userId){
+export const deletepost = asyncHandler(async (req, res, next) => {
+    if (!req.user.isAdmin || req.user.id !== req.params.userId) {
         next(errorHandler(403, 'Not Authorized'))
-
     }
-    await Post.findByIdAndDelete(req.params.postId);
+    await Post.findByIdAndDelete(req.params.postId)
     res.status(200).json('Post has been deleted successfully')
+})
+
+export const updatepost = asyncHandler(async (req, res, next) => {
+    if (!req.user.isAdmin || req.user.id !== req.params.userId) {
+        return next(errorHandler(403, 'Not Authorized'))
+    }
+
+    const updatedPost = await Post.findByIdAndUpdate(
+        req.params.postId,
+        {
+            $set: {
+                title: req.body.title,
+                content: req.body.content,
+                category: req.body.category,
+                image: req.body.image,
+            },
+        },
+        { new: true },
+    )
+
+    res.status(200).json(updatedPost)
 })
