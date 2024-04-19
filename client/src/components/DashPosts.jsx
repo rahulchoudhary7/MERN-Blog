@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 export default function DashPosts() {
     const { currentUser } = useSelector(state => state.user)
     const [userPosts, setUserPosts] = useState([])
-    console.log(userPosts)
+    const [showmore, setShowmore]  = useState(true);
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -18,6 +18,9 @@ export default function DashPosts() {
 
                 if (res.ok) {
                     setUserPosts(data.posts)
+                    if(data.posts.length<9){
+                        setShowmore(false);
+                    }
                 }
             } catch (error) {
                 console.log(error.message)
@@ -28,6 +31,27 @@ export default function DashPosts() {
             fetchPosts()
         }
     }, [currentUser._id])
+    
+    const handleShowMore = async ()=>{
+        const startIndex = userPosts.length;
+
+        try {
+            const res = await fetch(`/api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`)
+
+            const data = await res.json();
+
+            if(res.ok){
+                setUserPosts((prev)=>[...prev, ...data.posts]);
+
+
+                if(data.posts.length<9){
+                    setShowmore(false);
+                }
+            }
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
     return (
         <div className='table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbarr-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-gray-500'>
             {currentUser.isAdmin && userPosts.length > 0 ? (
@@ -91,6 +115,14 @@ export default function DashPosts() {
                             </Table.Body>
                         ))}
                     </Table>
+                    {
+                        showmore && (
+                            <button className='w-full text-teal-500 self-center text-sm py-7' onClick={handleShowMore}>
+                                Show more
+                            </button>
+
+                        )
+                    }
                 </>
             ) : (
                 <p>No posts available</p>
