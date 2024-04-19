@@ -325,7 +325,7 @@ export default function DashProfile() {
                 </Alert>
             )}
 
-            {error && (
+            {/* {error && (
                 <Alert
                     color={'failure'}
                     className='mt-5'
@@ -333,7 +333,7 @@ export default function DashProfile() {
                 >
                     {error}
                 </Alert>
-            )}
+            )} */}
             <div className='text-red-500 flex justify-between mt-5'>
                 <span
                     onClick={() => setShowModal(true)}

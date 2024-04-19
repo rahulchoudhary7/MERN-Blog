@@ -39,7 +39,7 @@ export const signin = asyncHandler(async (req, res, next) => {
     }
 
     const validPassword = bcryptjs.compareSync(password, validUser.password)
-
+                                                                                                                                                                                                    
     if (!validPassword) {
         return next(errorHandler(400, 'Email or Password not correct'))
     }
@@ -53,10 +53,10 @@ export const signin = asyncHandler(async (req, res, next) => {
         process.env.JWT_SECRET,
     )
 
-    res.status(200)
-        .cookie('accessToken', token, {
-            httpOnly: true,
-        })
+    res.cookie('accessToken', token, {
+        httpOnly: true,
+    })
+        .status(200)
         .json(rest)
 })
 
@@ -71,10 +71,10 @@ export const google = asyncHandler(async (req, res, next) => {
             process.env.JWT_SECRET,
         )
         const { password, ...rest } = user._doc
-        res.status(200)
-            .cookie('accessToken', token, {
-                httpOnly: true,
-            })
+        res.cookie('accessToken', token, {
+            httpOnly: true,
+        })
+            .status(200)
             .json(rest)
     } else {
         const generatedPassword =
@@ -92,12 +92,15 @@ export const google = asyncHandler(async (req, res, next) => {
         })
 
         await newUser.save()
-        const token = jwt.sign({ id: newUser._id, isAdmin: newUser.isAdmin }, process.env.JWT_SECRET)
+        const token = jwt.sign(
+            { id: newUser._id, isAdmin: newUser.isAdmin },
+            process.env.JWT_SECRET,
+        )
         const { password, ...rest } = newUser._doc
-        res.status(200)
-            .cookie('accessToken', token, {
-                httpOnly: true,
-            })
+        res.cookie('accessToken', token, {
+            httpOnly: true,
+        })
+            .status(200)
             .json(rest)
     }
 })
