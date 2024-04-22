@@ -11,7 +11,9 @@ export const verifyToken = (req, res, next) => {
 
     jwt.verify(token, process.env.JWT_SECRET, (error, user) => {
         if (error) {
-            return next(errorHandler(401, 'Unauthorized, access token not valid'))
+            return next(
+                errorHandler(401, 'Unauthorized, access token not valid'),
+            )
         }
 
         req.user = user
