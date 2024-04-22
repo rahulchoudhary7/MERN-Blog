@@ -1,29 +1,27 @@
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Alert, Button, Modal, Table } from 'flowbite-react'
-import { Link } from 'react-router-dom'
+import {FaCheck, FaTimes} from 'react-icons/fa'
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
 
-export default function DashPosts() {
+export default function DashUsers() {
     const { currentUser } = useSelector(state => state.user)
-    const [userPosts, setUserPosts] = useState([])
+    const [users, setUsers] = useState([])
     const [showmore, setShowmore] = useState(true)
     const [showModal, setShowModal] = useState(false)
-    const [postIdtoDelete, setPostIdToDelete] = useState(null)
+    const [userIdtoDelete, setUserIdToDelete] = useState(null)
     const [error, setError] = useState(null)
 
     useEffect(() => {
-        const fetchPosts = async () => {
+        const fetchUsers = async () => {
             setError(null)
             try {
-                const res = await fetch(
-                    `/api/post/getposts?userId=${currentUser._id}`,
-                )
+                const res = await fetch('/api/user/getusers')
                 const data = await res.json()
 
                 if (res.ok) {
-                    setUserPosts(data.posts)
-                    if (data.posts.length < 9) {
+                    setUsers(data.users)
+                    if (data.users.length < 9) {
                         setShowmore(false)
                     }
                 }
@@ -33,24 +31,24 @@ export default function DashPosts() {
         }
 
         if (currentUser.isAdmin) {
-            fetchPosts()
+            fetchUsers()
         }
     }, [currentUser._id])
 
     const handleShowMore = async () => {
-        const startIndex = userPosts.length
+        const startIndex = users.length
         setError(null)
         try {
             const res = await fetch(
-                `/api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`,
+                `/api/post/getusers?startIndex=${startIndex}`,
             )
 
             const data = await res.json()
 
             if (res.ok) {
-                setUserPosts(prev => [...prev, ...data.posts])
+                setUsers(prev => [...prev, ...data.users])
 
-                if (data.posts.length < 9) {
+                if (data.users.length < 9) {
                     setShowmore(false)
                 }
             }
@@ -59,94 +57,75 @@ export default function DashPosts() {
         }
     }
 
-    const handleDelete = async () => {
-        setShowModal(false)
-        setError(null)
-        try {
-            const res = await fetch(
-                `/api/post/deletepost/${postIdtoDelete}/${currentUser._id}`,
-                {
-                    method: 'DELETE',
-                },
-            )
-            const data = await res.json()
+    // const handleDelete = async () => {
+    //     setShowModal(false)
+    //     setError(null)
+    //     try {
+    //         const res = await fetch(
+    //             `/api/post/deletepost/${userIdtoDelete}/${currentUser._id}`,
+    //             {
+    //                 method: 'DELETE',
+    //             },
+    //         )
+    //         const data = await res.json()
 
-            if (!res.ok) {
-                setError(data.message)
-            } else {
-                setUserPosts(prev =>
-                    prev.filter(post => post._id !== postIdtoDelete),
-                )
-            }
-            setPostIdToDelete(null)
-        } catch (error) {
-            setError(null)
-        }
-    }
+    //         if (!res.ok) {
+    //             setError(data.message)
+    //         } else {
+    //             setUsers(prev =>
+    //                 prev.filter(user => user._id !== userIdtoDelete),
+    //             )
+    //         }
+    //         setUserIdToDelete(null)
+    //     } catch (error) {
+    //         setError(null)
+    //     }
+    // }
     return (
         <div className='table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbarr-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-gray-500'>
-            {currentUser.isAdmin && userPosts.length > 0 ? (
+            {currentUser.isAdmin && users.length > 0 ? (
                 <>
                     <Table hoverable className='shadow-md'>
                         <Table.Head>
-                            <Table.HeadCell>Date Updated</Table.HeadCell>
-                            <Table.HeadCell>Post Image</Table.HeadCell>
-                            <Table.HeadCell>Post Title</Table.HeadCell>
-                            <Table.HeadCell>Category</Table.HeadCell>
+                            <Table.HeadCell>Date Created</Table.HeadCell>
+                            <Table.HeadCell>Profile Picture</Table.HeadCell>
+                            <Table.HeadCell>Username</Table.HeadCell>
+                            <Table.HeadCell>Email</Table.HeadCell>
+                            <Table.HeadCell>Admin</Table.HeadCell>
                             <Table.HeadCell>Delete</Table.HeadCell>
-                            <Table.HeadCell>
-                                <span>Edit</span>
-                            </Table.HeadCell>
                         </Table.Head>
 
-                        {userPosts.map(post => (
-                            <Table.Body key={post._id} className='divide-y'>
+                        {users.map(user => (
+                            <Table.Body key={user._id} className='divide-y'>
                                 <Table.Row className='bg-white dark:border-gray-700 dark:bg-gray-800'>
                                     <Table.Cell>
                                         {new Date(
-                                            post.updatedAt,
+                                            user.createdAt,
                                         ).toLocaleDateString()}
                                     </Table.Cell>
                                     <Table.Cell>
-                                        <Link to={`/post/${post.slug}`}>
-                                            <img
-                                                src={post.image}
-                                                alt={post.title}
-                                                className='w-20 h-10 object-cover bg-gray-500'
-                                            />
-                                        </Link>
+                                        <img
+                                            src={user.profilePicture}
+                                            alt={user.username}
+                                            className='w-10 h-10 object-cover bg-gray-500 rounded-full self-center'
+                                        />
                                     </Table.Cell>
-                                    <Table.Cell>
-                                        <Link
-                                            to={`/post/${post.slug}`}
-                                            className='font-medium teext-gray-900 dark:text-gray-200'
-                                        >
-                                            {post.title}
-                                        </Link>
+                                    <Table.Cell className='font-medium teext-gray-900 dark:text-gray-200'>
+                                        {user.username}
                                     </Table.Cell>
-                                    <Table.Cell>
-                                        <Link to={`/post/${post.slug}`}>
-                                            {post.category}
-                                        </Link>
-                                    </Table.Cell>
+                                    <Table.Cell>{user.email}</Table.Cell>
+                                    <Table.Cell>{user.isAdmin? (<FaCheck className="text-green-500"/>) : (<FaTimes className="text-red-500"/>)}</Table.Cell>
 
                                     <Table.Cell>
                                         <span
                                             className='font-medium text-red-500 hover:underline cursor-pointer'
                                             onClick={() => {
                                                 setShowModal(true)
-                                                setPostIdToDelete(post._id)
+                                                setUserIdToDelete(user._id)
                                             }}
                                         >
                                             Delete
                                         </span>
-                                    </Table.Cell>
-                                    <Table.Cell>
-                                        <Link to={`/update-post/${post._id}`} >
-                                            <span className=' font-medium hover:underline text-teal-500'>
-                                                Edit
-                                            </span>
-                                        </Link>
                                     </Table.Cell>
                                 </Table.Row>
                             </Table.Body>
@@ -162,7 +141,7 @@ export default function DashPosts() {
                     )}
                 </>
             ) : (
-                <p>No posts available</p>
+                <p>No Users available</p>
             )}
             <Modal
                 show={showModal}
@@ -175,13 +154,11 @@ export default function DashPosts() {
                     <div className='text-center'>
                         <HiOutlineExclamationCircle className='h-14 w-14 color-gray-400 dark:text-gray-200 mb-4 mx-auto' />
                         <h3 className='mb-5 text-lg text-gray-500 dark:text-gray-400'>
-                            Are you sure you want to delete this post?
+                            Are you sure you want to delete this user?
                         </h3>
 
                         <div className='flex justify-center gap-7'>
-                            <Button color={'failure'} onClick={handleDelete}>
-                                Yes, Delete
-                            </Button>
+                            <Button color={'failure'}>Yes, Delete</Button>
                             <Button
                                 color={'gray'}
                                 onClick={() => setShowModal(false)}
