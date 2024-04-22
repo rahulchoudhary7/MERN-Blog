@@ -107,14 +107,14 @@ export default function DashUsers() {
                                         <img
                                             src={user.profilePicture}
                                             alt={user.username}
-                                            className='w-10 h-10 object-cover bg-gray-500 rounded-full self-center'
+                                            className='w-10 h-10 object-cover bg-gray-500 rounded-full mx-auto'
                                         />
                                     </Table.Cell>
                                     <Table.Cell className='font-medium teext-gray-900 dark:text-gray-200'>
                                         {user.username}
                                     </Table.Cell>
                                     <Table.Cell>{user.email}</Table.Cell>
-                                    <Table.Cell>{user.isAdmin? (<FaCheck className="text-green-500"/>) : (<FaTimes className="text-red-500"/>)}</Table.Cell>
+                                    <Table.Cell>{user.isAdmin? (<FaCheck className="text-green-500 mx-auto"/>) : (<FaTimes className="text-red-500 mx-auto"/>)}</Table.Cell>
 
                                     <Table.Cell>
                                         <span
