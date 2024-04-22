@@ -64,7 +64,7 @@ export const updateUser = asyncHandler(async (req, res, next) => {
 })
 
 export const deleteUser = asyncHandler(async (req, res, next) => {
-    if (req.user.id !== req.params.userId) {
+    if (!req.user.isAdmin && req.user.id !== req.params.userId) {
         return next(errorHandler(403, 'You are not authorized'))
     }
 

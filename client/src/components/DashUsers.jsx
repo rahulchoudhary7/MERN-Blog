@@ -57,30 +57,30 @@ export default function DashUsers() {
         }
     }
 
-    // const handleDelete = async () => {
-    //     setShowModal(false)
-    //     setError(null)
-    //     try {
-    //         const res = await fetch(
-    //             `/api/post/deletepost/${userIdtoDelete}/${currentUser._id}`,
-    //             {
-    //                 method: 'DELETE',
-    //             },
-    //         )
-    //         const data = await res.json()
+    const handleDeleteUser = async () => {
+        setShowModal(false)
+        setError(null)
+        try {
+            const res = await fetch(
+                `/api/user/delete/${userIdtoDelete}`,
+                {
+                    method: 'DELETE',
+                },
+            )
+            const data = await res.json()
 
-    //         if (!res.ok) {
-    //             setError(data.message)
-    //         } else {
-    //             setUsers(prev =>
-    //                 prev.filter(user => user._id !== userIdtoDelete),
-    //             )
-    //         }
-    //         setUserIdToDelete(null)
-    //     } catch (error) {
-    //         setError(null)
-    //     }
-    // }
+            if (!res.ok) {
+                setError(data.message)
+            } else {
+                setUsers(prev =>
+                    prev.filter(user => user._id !== userIdtoDelete),
+                )
+            }
+            setUserIdToDelete(null)
+        } catch (error) {
+            setError(null)
+        }
+    }
     return (
         <div className='table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbarr-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-gray-500'>
             {currentUser.isAdmin && users.length > 0 ? (
@@ -158,7 +158,7 @@ export default function DashUsers() {
                         </h3>
 
                         <div className='flex justify-center gap-7'>
-                            <Button color={'failure'}>Yes, Delete</Button>
+                            <Button color={'failure'} onClick={handleDeleteUser}>Yes, Delete</Button>
                             <Button
                                 color={'gray'}
                                 onClick={() => setShowModal(false)}
