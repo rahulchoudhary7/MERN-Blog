@@ -1,8 +1,8 @@
 import { Alert, Button, Spinner } from 'flowbite-react'
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 import { Link, useParams } from 'react-router-dom'
 import CallToAction from '../components/CallToAction'
+import CommentSection from '../components/CommentSection'
 
 export default function PostPage() {
     const { postSlug } = useParams()
@@ -10,9 +10,6 @@ export default function PostPage() {
     const [error, setError] = useState(null)
     const [post, setPost] = useState(null)
 
-    const { currentUser } = useSelector(state => state.user)
-
-    console.log(post)
 
     useEffect(() => {
         const fetchPost = async () => {
@@ -109,6 +106,7 @@ export default function PostPage() {
                 <div className="max-w-6xl mx-auto w-full">
                     <CallToAction/>
                 </div>
+                <CommentSection postId = {post && post._id}/>
             </main>
         </>
     )
