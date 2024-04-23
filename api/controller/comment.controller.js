@@ -21,3 +21,13 @@ export const createComment = asyncHandler(async (req, res, next) => {
 
     res.status(200).json(newComment)
 })
+
+export const getPostComments = asyncHandler(async (req, res, next) => {
+    const comments = await Comment.find({
+        postId: req.params.postId,
+    }).sort({
+        createdAt: -1,
+    })
+
+    res.status(200).json(comments);
+})

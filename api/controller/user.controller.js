@@ -3,12 +3,6 @@ import { errorHandler } from '../utils/error.js'
 import bcryptjs from 'bcryptjs'
 import User from '../models/user.model.js'
 
-export const getUser = (req, res) => {
-    res.json({
-        message: 'API is working',
-    })
-}
-
 export const updateUser = asyncHandler(async (req, res, next) => {
     if (req.user.id !== req.params.userId) {
         return next(errorHandler(403, 'You are not authorized'))
@@ -115,4 +109,16 @@ export const getusers = asyncHandler(async (req, res, next) => {
         totalUsers,
         lastMonthUsers,
     })
+})
+
+export const getUser = asyncHandler(async (req, res, next) => {
+    const user = await User.findById(req.params.userId)
+
+
+    if (!user) {
+        next(errorHandler(404, 'No users found'))
+    }
+    const { password, ...rest } = user._doc
+
+    res.status(200).json(rest)
 })
