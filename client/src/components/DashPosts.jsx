@@ -1,18 +1,20 @@
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { Alert, Button, Modal, Table } from 'flowbite-react'
+import { Alert, Button, Modal, Spinner, Table } from 'flowbite-react'
 import { Link } from 'react-router-dom'
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
 
 export default function DashPosts() {
-    const { currentUser } = useSelector(state => state.user)
+    const { currentUser} = useSelector(state => state.user)
     const [userPosts, setUserPosts] = useState([])
     const [showmore, setShowmore] = useState(true)
     const [showModal, setShowModal] = useState(false)
     const [postIdtoDelete, setPostIdToDelete] = useState(null)
     const [error, setError] = useState(null)
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
+        setLoading(true)
         const fetchPosts = async () => {
             setError(null)
             try {
@@ -26,9 +28,11 @@ export default function DashPosts() {
                     if (data.posts.length < 9) {
                         setShowmore(false)
                     }
+                    setLoading(false)
                 }
             } catch (error) {
                 setError(error.message)
+                setLoading(false)
             }
         }
 
@@ -41,6 +45,7 @@ export default function DashPosts() {
         const startIndex = userPosts.length
         setError(null)
         try {
+            setLoading(true)
             const res = await fetch(
                 `/api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`,
             )
@@ -53,6 +58,7 @@ export default function DashPosts() {
                 if (data.posts.length < 9) {
                     setShowmore(false)
                 }
+                setLoading(false)
             }
         } catch (error) {
             setError(null)
@@ -83,6 +89,13 @@ export default function DashPosts() {
             setError(null)
         }
     }
+
+    if (loading)
+    return (
+        <div className='flex justify-center items-center min-h-screen w-full'>
+            <Spinner size={'xl'} />
+        </div>
+    )
     return (
         <div className='table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbarr-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-gray-500'>
             {currentUser.isAdmin && userPosts.length > 0 ? (

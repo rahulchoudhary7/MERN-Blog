@@ -2,6 +2,7 @@ import { Alert, Button, Spinner } from 'flowbite-react'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Link, useParams } from 'react-router-dom'
+import CallToAction from '../components/CallToAction'
 
 export default function PostPage() {
     const { postSlug } = useParams()
@@ -96,9 +97,18 @@ export default function PostPage() {
                 />
                 <div className='flex justify-between border-b border-slate-500 mx-auto w-full max-w-6xl text-sm p-3'>
                     <span>{post && formattedDate}</span>
-                    <span className='italic'>{post && (post.content.length/1000).toFixed(0)} min read</span>
+                    <span className='italic'>
+                        {post && (post.content.length / 1000).toFixed(0)} min
+                        read
+                    </span>
                 </div>
-                <div className="p-3 max-w-6xl mx-auto post-content" dangerouslySetInnerHTML={{__html: post && post.content}}></div>
+                <div
+                    className='p-3 max-w-6xl mx-auto post-content'
+                    dangerouslySetInnerHTML={{ __html: post && post.content }}
+                ></div>
+                <div className="max-w-6xl mx-auto w-full">
+                    <CallToAction/>
+                </div>
             </main>
         </>
     )

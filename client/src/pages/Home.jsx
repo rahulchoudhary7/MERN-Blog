@@ -1,9 +1,10 @@
+import CallToAction from "../components/CallToAction";
 
 
 export default function Home() {
   return (
-    <div>
-      <h1>Home</h1>
+    <div className="p-10 mb-3">
+      <CallToAction/>
     </div>
   )
 }
