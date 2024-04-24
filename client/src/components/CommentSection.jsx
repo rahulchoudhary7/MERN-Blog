@@ -9,6 +9,7 @@ export default function CommentSection({ postId }) {
     const [comment, setComment] = useState('')
     const [error, setError] = useState(null)
     const [comments, setComments] = useState(null)
+    
 
     const navigate = useNavigate()
 
@@ -67,6 +68,7 @@ export default function CommentSection({ postId }) {
     }
 
     const handleLike = async commentId => {
+        setError(null)
         try {
             if (!currentUser) {
                 navigate('/signin')
@@ -77,8 +79,8 @@ export default function CommentSection({ postId }) {
                 method: 'PUT',
             })
 
-            
             if (res.ok) {
+                setError(null)
                 const data = await res.json()
                 setComments(
                     comments.map(comment => {
@@ -92,11 +94,21 @@ export default function CommentSection({ postId }) {
                     }),
                 )
             }
-            console.log(comments);
+            console.log(comments)
         } catch (error) {
             setError(error.message)
         }
     }
+
+    const handleEdit = async(comment, editedContent)=>{
+        setComments(
+            comments.map((c)=>{
+                return c._id===comment._id ? {...c, content:editedContent} : c;
+            })
+        )
+    }
+
+   
 
     return (
         <div className='max-w-2xl mx-auto w-full p-3'>
@@ -117,7 +129,7 @@ export default function CommentSection({ postId }) {
                 </div>
             ) : (
                 <div className='text-sm text-teal-500 my-5 flex gap-1'>
-                    Sign in for add a Comment 👉
+                    Sign in see or add comments 👉
                     <Link
                         to={'/signin'}
                         className='text-blue-500 hover:underline'
@@ -168,7 +180,7 @@ export default function CommentSection({ postId }) {
                     ) : (
                         <>
                             <div className='text-sm my-5 flex items-center gap-1'>
-                                <p>Comments</p>
+                                <p className='font-medium'>Comments</p>
 
                                 <div className='border border-gray-400 px-2 py-1 rounded-sm'>
                                     <p>{comments.length}</p>
@@ -180,6 +192,7 @@ export default function CommentSection({ postId }) {
                                     key={comment._id}
                                     comment={comment}
                                     onLike={handleLike}
+                                    onEdit={handleEdit}
                                 />
                             ))}
                         </>
