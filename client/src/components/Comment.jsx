@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import { Textarea } from 'flowbite-react'
 import { Button } from 'flowbite-react'
 
-export default function Comment({ comment, onLike, onEdit }) {
+export default function Comment({ comment, onLike, onEdit, onDelete }) {
     const [user, setUser] = useState({})
     const [error, setError] = useState(null)
     const [isEditing, setIsEditing] = useState(false)
@@ -82,7 +82,7 @@ export default function Comment({ comment, onLike, onEdit }) {
                     </span>
 
                     <span className='text-gray-500 text-xs'>
-                        {moment(comment.updatedAt).fromNow()}
+                        {moment(comment.createdAt).fromNow()}
                     </span>
                 </div>
                 {isEditing ? (
@@ -137,15 +137,37 @@ export default function Comment({ comment, onLike, onEdit }) {
                                             ? 'like'
                                             : 'likes')}
                             </p>
-
                             {currentUser &&
                                 currentUser._id === comment.userId && (
-                                    <span
-                                        className='text-gray-500 hover:text-blue-500'
-                                        onClick={handleEdit}
-                                    >
-                                        Edit
-                                    </span>
+                                    <div className='flex gap-2 ml-1 font-medium'>
+                                        <span
+                                            className='text-gray-500 hover:text-blue-500 hover:cursor-pointer'
+                                            onClick={handleEdit}
+                                        >
+                                            Edit
+                                        </span>
+                                        <span
+                                            className='text-gray-500 hover:text-red-500 hover:cursor-pointer'
+                                            onClick={() =>
+                                                onDelete(comment._id)
+                                            }
+                                        >
+                                            Delete
+                                        </span>
+                                    </div>
+                                )}
+                            {currentUser._id !== comment.userId &&
+                                currentUser.isAdmin && (
+                                    <div className='flex gap-2 ml-1 font-medium'>
+                                        <span
+                                            className='text-gray-500 hover:text-red-500 hover:cursor-pointer'
+                                            onClick={() =>
+                                                onDelete(comment._id)
+                                            }
+                                        >
+                                            Delete
+                                        </span>
+                                    </div>
                                 )}
                         </div>
                     </>

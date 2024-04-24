@@ -70,3 +70,17 @@ export const editComment = asyncHandler(async (req, res, next) => {
 
     res.status(200).json(updatedComment)
 })
+
+export const deleteComment = asyncHandler(async(req, res, next)=>{
+    const comment = await Comment.findById(req.params.commentId)
+
+    if(!comment){
+        next(errorHandler(404, 'Comment not found'))
+    }
+    if(comment.userId!==req.user.id && !req.user.isAdmin){
+         return next(errorHandler(403, 'Not allowed to delete the comment'))
+    }
+    await Comment.findByIdAndDelete(comment._id);
+
+    res.status(200).json('Comment deleted successfully')
+})

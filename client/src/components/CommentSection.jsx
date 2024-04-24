@@ -1,15 +1,17 @@
 import { useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
-import { Alert, Button, Textarea } from 'flowbite-react'
+import { Alert, Button, Modal, Textarea } from 'flowbite-react'
 import { useEffect, useState } from 'react'
 import Comment from './Comment.jsx'
+import { HiOutlineExclamationCircle } from 'react-icons/hi'
 
 export default function CommentSection({ postId }) {
     const { currentUser } = useSelector(state => state.user)
     const [comment, setComment] = useState('')
     const [error, setError] = useState(null)
     const [comments, setComments] = useState(null)
-    
+    const [showModal, setShowModal] = useState(false)
+    const [commentToDelete, setCommentToDelete] = useState(null)
 
     const navigate = useNavigate()
 
@@ -100,15 +102,45 @@ export default function CommentSection({ postId }) {
         }
     }
 
-    const handleEdit = async(comment, editedContent)=>{
+    const handleEdit = async (comment, editedContent) => {
         setComments(
-            comments.map((c)=>{
-                return c._id===comment._id ? {...c, content:editedContent} : c;
-            })
+            comments.map(c => {
+                return c._id === comment._id
+                    ? { ...c, content: editedContent }
+                    : c
+            }),
         )
     }
 
-   
+    const handleDelete = async commentId => {
+        setError(null)
+        setShowModal(false)
+
+        try {
+            if (!currentUser) {
+                navigate('/signin')
+                return
+            }
+
+            const res = await fetch(
+                `/api/comments/deleteComment/${commentId}`,
+                {
+                    method: 'DELETE',
+                },
+            )
+
+            if (res.ok) {
+                setError(null)
+                const data = await res.json()
+
+                setComments(
+                    comments.filter(comment => comment._id !== commentId),
+                )
+            }
+        } catch (error) {
+            setError(error.message)
+        }
+    }
 
     return (
         <div className='max-w-2xl mx-auto w-full p-3'>
@@ -193,12 +225,47 @@ export default function CommentSection({ postId }) {
                                     comment={comment}
                                     onLike={handleLike}
                                     onEdit={handleEdit}
+                                    onDelete={commentId => {
+                                        setShowModal(true)
+                                        setCommentToDelete(commentId)
+                                    }}
                                 />
                             ))}
                         </>
                     )}
                 </>
             )}
+            <Modal
+                show={showModal}
+                onClose={() => setShowModal(false)}
+                popup
+                size={'md'}
+            >
+                <Modal.Header />
+                <Modal.Body>
+                    <div className='text-center'>
+                        <HiOutlineExclamationCircle className='h-14 w-14 color-gray-400 dark:text-gray-200 mb-4 mx-auto' />
+                        <h3 className='mb-5 text-lg text-gray-500 dark:text-gray-400'>
+                            Are you sure you want to delete this comment?
+                        </h3>
+
+                        <div className='flex justify-center gap-7'>
+                            <Button
+                                color={'failure'}
+                                onClick={() => handleDelete(commentToDelete)}
+                            >
+                                Yes, Delete
+                            </Button>
+                            <Button
+                                color={'gray'}
+                                onClick={() => setShowModal(false)}
+                            >
+                                No, Cancel
+                            </Button>
+                        </div>
+                    </div>
+                </Modal.Body>
+            </Modal>
         </div>
     )
 }
