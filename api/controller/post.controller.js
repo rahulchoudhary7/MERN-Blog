@@ -97,3 +97,5 @@ export const updatepost = asyncHandler(async (req, res, next) => {
 
     res.status(200).json(updatedPost)
 })
+
+
