@@ -3,13 +3,13 @@ import { useEffect, useState } from 'react'
 import {
     HiArrowSmRight,
     HiDocumentText,
-    HiOutlineUserGroup,
-    HiUser,
 } from 'react-icons/hi'
+import { FaUsers, FaUser } from "react-icons/fa";
 import { LiaComments } from "react-icons/lia";
 import { Link, useLocation } from 'react-router-dom'
 import { signoutSuccess } from '../redux/user/userSlice'
 import { useDispatch, useSelector } from 'react-redux'
+import { MdDashboard } from "react-icons/md";
 
 export default function DashSidebar() {
     const location = useLocation()
@@ -49,7 +49,7 @@ export default function DashSidebar() {
                     <Link to={'/dashboard?tab=profile'}>
                         <Sidebar.Item
                             active={tab === 'profile'}
-                            icon={HiUser}
+                            icon={FaUser}
                             label={currentUser.isAdmin ? 'Admin' : 'User'}
                             labelColor='dark'
                             className='cursor-pointer'
@@ -59,6 +59,17 @@ export default function DashSidebar() {
                         </Sidebar.Item>
                     </Link>
 
+                    {currentUser.isAdmin && (
+                        <Link to={'/dashboard?tab=dashboard'}>
+                            <Sidebar.Item
+                                as='div'
+                                active={tab === 'dashboard'}
+                                icon={MdDashboard}
+                            >
+                                Dashboard
+                            </Sidebar.Item>
+                        </Link>
+                    )}
                     {currentUser.isAdmin && (
                         <Link to={'/dashboard?tab=posts'}>
                             <Sidebar.Item
@@ -76,7 +87,7 @@ export default function DashSidebar() {
                             <Sidebar.Item
                                 as='div'
                                 active={tab === 'users'}
-                                icon={HiOutlineUserGroup}
+                                icon={FaUsers}
                             >
                                 Users
                             </Sidebar.Item>
