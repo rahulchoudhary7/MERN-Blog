@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Alert, Button, Modal, Table } from 'flowbite-react'
-import {FaCheck, FaTimes} from 'react-icons/fa'
+import { HiBadgeCheck } from 'react-icons/hi'
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
+import { MdAutoDelete } from 'react-icons/md'
 
 export default function DashUsers() {
     const { currentUser } = useSelector(state => state.user)
@@ -61,12 +62,9 @@ export default function DashUsers() {
         setShowModal(false)
         setError(null)
         try {
-            const res = await fetch(
-                `/api/user/delete/${userIdtoDelete}`,
-                {
-                    method: 'DELETE',
-                },
-            )
+            const res = await fetch(`/api/user/delete/${userIdtoDelete}`, {
+                method: 'DELETE',
+            })
             const data = await res.json()
 
             if (!res.ok) {
@@ -80,6 +78,26 @@ export default function DashUsers() {
         } catch (error) {
             setError(null)
         }
+    }
+    const formattedDate = user => {
+        const date = new Date(user && user.createdAt)
+        const months = [
+            'Jan',
+            'Feb',
+            'Mar',
+            'Apr',
+            'May',
+            'Jun',
+            'Jul',
+            'Aug',
+            'Sep',
+            'Oct',
+            'Nov',
+            'Dec',
+        ]
+        return `${date.getDate()} ${months[date.getMonth()]} ${String(
+            date.getFullYear(),
+        ).slice(2)}`
     }
     return (
         <div className='table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbarr-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-gray-500'>
@@ -99,9 +117,7 @@ export default function DashUsers() {
                             <Table.Body key={user._id} className='divide-y'>
                                 <Table.Row className='bg-white dark:border-gray-700 dark:bg-gray-800'>
                                     <Table.Cell>
-                                        {new Date(
-                                            user.createdAt,
-                                        ).toLocaleDateString()}
+                                        {formattedDate(user)}
                                     </Table.Cell>
                                     <Table.Cell>
                                         <img
@@ -114,18 +130,22 @@ export default function DashUsers() {
                                         {user.username}
                                     </Table.Cell>
                                     <Table.Cell>{user.email}</Table.Cell>
-                                    <Table.Cell>{user.isAdmin? (<FaCheck className="text-green-500 mx-auto"/>) : (<FaTimes className="text-red-500 mx-auto"/>)}</Table.Cell>
+                                    <Table.Cell>
+                                        {user.isAdmin ? (
+                                            <HiBadgeCheck className='text-blue-500 mx-auto' />
+                                        ) : (
+                                            <HiBadgeCheck className='text-gray-500 mx-auto' />
+                                        )}
+                                    </Table.Cell>
 
                                     <Table.Cell>
-                                        <span
-                                            className='font-medium text-red-500 hover:underline cursor-pointer'
+                                        <MdAutoDelete
+                                            className='mx-auto hover:text-red-500 hover:cursor-pointer'
                                             onClick={() => {
                                                 setShowModal(true)
                                                 setUserIdToDelete(user._id)
                                             }}
-                                        >
-                                            Delete
-                                        </span>
+                                        />
                                     </Table.Cell>
                                 </Table.Row>
                             </Table.Body>
@@ -158,7 +178,12 @@ export default function DashUsers() {
                         </h3>
 
                         <div className='flex justify-center gap-7'>
-                            <Button color={'failure'} onClick={handleDeleteUser}>Yes, Delete</Button>
+                            <Button
+                                color={'failure'}
+                                onClick={handleDeleteUser}
+                            >
+                                Yes, Delete
+                            </Button>
                             <Button
                                 color={'gray'}
                                 onClick={() => setShowModal(false)}
