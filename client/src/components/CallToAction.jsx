@@ -4,7 +4,7 @@ export default function CallToAction() {
     return (
         <div className='flex flex-col sm:flex-row p-3 border border-teal-500 justify-center items-center rounded-tl-3xl rounded-br-3xl text-center'>
             <div className='flex-1 flex-col'>
-                <h2 className='font-medium text-md sm:text-xl'>
+                <h2 className='font-medium text-md sm:text-xl '>
                     🌟 MERN & Spring Boot Developer Available 🌟 <br/>
                     💼 Need expertise in MongoDB, Express.js, React, Node.js, and SpringBoot?<br/>
                     💻 Let&apos;s build robust solutions together. Get in touch now! 🚀
