@@ -3,6 +3,7 @@ import CallToAction from '../components/CallToAction'
 import { Link } from 'react-router-dom'
 import PostCard from '../components/PostCard'
 
+
 export default function Home() {
     const [posts, setPosts] = useState([])
 
@@ -32,7 +33,7 @@ export default function Home() {
                         Welcome to our tech blog hub! 🚀 Get ready to dive into
                         the digital universe where we decode the latest trends,
                         untangle complex concepts, and ignite your tech passion!
-                        From coding conundrums to AI adventures, we've got your
+                        From coding conundrums to AI adventures, we&apos;ve got your
                         back. Join us for a thrilling ride through bytes and
                         beyond. Let&apos;s geek out together! Welcome aboard!
                     </p>
