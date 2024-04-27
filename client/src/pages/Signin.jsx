@@ -48,7 +48,6 @@ function Signin() {
         try {
             dispatch(signInStart())
 
-            console.log(formData)
             const res = await fetch('http://localhost:3000/api/auth/signin', {
                 method: 'POST',
                 headers: {
