@@ -62,7 +62,7 @@ function Header() {
                 >
                     
                     <RiCompassDiscoverFill className='text-red-500 h-10 w-10 ' />
-                    <span className='text-xl font-bold'>
+                    <span className='text:lg sm:text-xl font-bold'>
                         NOMAD&apos;S NEXUS
                     </span>
                 </Link>
@@ -133,7 +133,7 @@ function Header() {
                         </Dropdown>
                     ) : (
                         <Link to={'/signin'}>
-                            <Button gradientDuoTone='purpleToBlue'>
+                            <Button gradientDuoTone='purpleToBlue' className='text:xs sm:text-sm'>
                                 Sign In
                             </Button>
                         </Link>
