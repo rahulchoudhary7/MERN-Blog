@@ -63,19 +63,24 @@ export default function Home() {
                     </Toast>
                 )}
 
-               
                 <div className='flex flex-col gap-6 px-4 p-28 pb-5 max-w-6xl mx-auto'>
                     <h1 className='text-3xl font-bold lg:text-6xl'>
                         Welcome to my Blog!
                     </h1>
-                    <p className='text-gray-500 text-xs sm:text-sm'>
-                        Welcome to our tech blog hub! 🚀 Get ready to dive into
-                        the digital universe where we decode the latest trends,
-                        untangle complex concepts, and ignite your tech passion!
-                        From coding conundrums to AI adventures, we&apos;ve got
-                        your back. Join us for a thrilling ride through bytes
-                        and beyond. Let&apos;s geek out together! Welcome
-                        aboard!
+                    <p className='text-gray-500 text-sm sm:text-md'>
+                        Welcome to our blog hub! 🚀 Get ready to explore a
+                        diverse universe where we delve into personal
+                        reflections, tantalizing culinary adventures,
+                        cutting-edge tech insights, exhilarating travel
+                        experiences, and vibrant lifestyle inspirations! Whether
+                        you're seeking heartfelt stories, mouthwatering recipes,
+                        the latest gadgets, wanderlust-worthy destinations, or
+                        tips for living your best life, you&apos;re in the right
+                        place. Join us for a captivating journey through the
+                        realms of personal growth, gastronomic delights,
+                        technological innovations, globetrotting adventures, and
+                        everyday inspiration. Let&apos;s embark on this enriching
+                        voyage together! Welcome aboard!
                     </p>
                     <Link
                         to={'/posts'}
@@ -86,13 +91,12 @@ export default function Home() {
                 </div>
                 {joke && (
                     <Banner className='my-10'>
-                         <h2 className='text-center text-md font-medium p-1'>
-                                        Something to make you laugh 😁
-                                    </h2>
+                        <h2 className='text-center text-md font-medium p-1'>
+                            Something to make you laugh 😁
+                        </h2>
                         <div className='flex max-w-2xl w-full justify-between border-b border-gray-200 bg-gray-50 p-4 dark:border-gray-600 dark:bg-gray-700 mx-auto rounded-full'>
                             <div className='mx-auto flex items-center'>
                                 <p className='flex flex-col items-center text-sm font-normal text-gray-700 dark:text-gray-400'>
-                                   
                                     <span className='[&_p]:inline text-center'>
                                         {joke.setup}
                                     </span>
