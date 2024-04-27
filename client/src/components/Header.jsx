@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { toggleTheme } from '../redux/theme/themeSlice'
 import { signoutSuccess } from '../redux/user/userSlice'
 import { useEffect, useState } from 'react'
+import { RiCompassDiscoverFill } from "react-icons/ri";
 function Header() {
     const { currentUser } = useSelector(state => state.user)
     const { theme } = useSelector(state => state.theme)
@@ -57,13 +58,16 @@ function Header() {
         <Navbar className='border-b-2'>
             <Link
                 to={'/'}
-                className='self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white'
+                className='self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white flex items-center justify-center gap-2'
             >
-                <span className='px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to bg-pink-500 rounded-lg text-white'>
+                {/* <span className='px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to bg-pink-500 rounded-lg text-white'>
                     Rahul&apos;s
                 </span>
-                Blog
+                Blog */}
+                <RiCompassDiscoverFill className='text-red-500 h-10 w-10 '/>
+                <span className='text-xl font-bold'>CODECOMPASS</span>
             </Link>
+               
             <form onSubmit={handleSubmit}>
                 <TextInput
                     type='text'

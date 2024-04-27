@@ -8,6 +8,7 @@ import {
 } from '../redux/user/userSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import OAuth from '../components/OAuth'
+import { RiCompassDiscoverFill } from 'react-icons/ri'
 
 function Signin() {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false)
@@ -61,17 +62,17 @@ function Signin() {
         <div className='min-h-screen mt-20'>
             <div className='flex gap-5 p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center'>
                 {/* leftside */}
-                <div className='flex-1'>
+                <div className='flex flex-col flex-1'>
                     <Link
                         to={'/'}
-                        className='font-bold dark:text-white text-4xl'
+                        className='font-bold dark:text-white flex justify-center items-center gap-2'
                     >
-                        <span className='px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to bg-pink-500 rounded-lg text-white'>
-                            Rahul&apos;s
+                        <RiCompassDiscoverFill className=' text-red-500 h-16 w-16 ' />
+                        <span className='text-4xl font-bold'>
+                            CODECOMPASS
                         </span>
-                        Blog
                     </Link>
-                    <p className='text-sm mt-5'>
+                    <p className='text-sm mt-5 pl-4'>
                         This is a demo project. You can sign up with your email
                         and password or with Google
                     </p>

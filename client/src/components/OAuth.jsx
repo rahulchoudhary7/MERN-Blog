@@ -1,5 +1,4 @@
 import { Button } from 'flowbite-react'
-import { AiFillGoogleCircle } from 'react-icons/ai'
 import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth'
 import { app } from '../firebase'
 import { useDispatch } from 'react-redux'
@@ -51,7 +50,7 @@ export default function OAuth() {
       outline
       onClick={handleGoogleClick}
     >
-      <AiFillGoogleCircle className='w-6 h-6 mr-2' />
+      <img src='https://firebasestorage.googleapis.com/v0/b/rahul-mern-blog.appspot.com/o/search.png?alt=media&token=f02fe5e0-d813-4620-87d5-73c1f90f8363' className='w-5 h-5 mr-3' />
           Continue with Google
     </Button>
   )

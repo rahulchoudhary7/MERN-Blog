@@ -25,7 +25,7 @@ export default function CallToAction() {
 
             <div className='flex-1 p-7'>
                 <img
-                    src='https://www.logicraysacademy.com/blog/wp-content/uploads/2023/05/MVM1-1.png'
+                    src='https://firebasestorage.googleapis.com/v0/b/rahul-mern-blog.appspot.com/o/MERN.png?alt=media&token=29f1a77c-e9e7-469a-ba9b-2234264d5a02'
                     alt=''
                 />
             </div>
