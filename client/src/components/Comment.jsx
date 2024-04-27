@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import moment from 'moment'
 import { GoHeartFill } from 'react-icons/go'
 import { useSelector } from 'react-redux'
-import { Textarea } from 'flowbite-react'
+import { Alert, Textarea } from 'flowbite-react'
 import { Button } from 'flowbite-react'
 
 export default function Comment({ comment, onLike, onEdit, onDelete }) {
@@ -13,18 +13,26 @@ export default function Comment({ comment, onLike, onEdit, onDelete }) {
 
     const { currentUser } = useSelector(state => state.user)
 
+    console.log(user);
+
     useEffect(() => {
         const fetchUser = async () => {
             try {
                 const res = await fetch(`/api/user/${comment.userId}`)
 
-                const data = await res.json()
+                
 
-                if (res.ok) {
+                if(res.status===404){
+                    setUser(null)
+                }else if (res.ok) {
+                    const data = await res.json()
                     setUser(data)
                 }
+                
             } catch (error) {
+                setUser(null)
                 setError(error)
+                return
             }
         }
 
@@ -53,7 +61,6 @@ export default function Comment({ comment, onLike, onEdit, onDelete }) {
             )
 
             if (res.ok) {
-                console.log('sab thik hai')
                 setError(null)
                 setIsEditing(false)
                 onEdit(comment, editedContent)
@@ -69,8 +76,7 @@ export default function Comment({ comment, onLike, onEdit, onDelete }) {
         <div className='flex p-4 text-sm'>
             <div className='flex-shrink-0 mr-2'>
                 <img
-                    src={user.profilePicture}
-                    alt={user.username}
+                    src={user ? user.profilePicture : ''}
                     className='w-10 h-10 rounded-full bg-gray-200'
                 />
             </div>
@@ -173,6 +179,8 @@ export default function Comment({ comment, onLike, onEdit, onDelete }) {
                     </>
                 )}
             </div>
+
+            {error && <Alert color={'failure'}>{error}</Alert>}
         </div>
     )
 }

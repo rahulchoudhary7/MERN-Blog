@@ -15,7 +15,7 @@ import 'react-circular-progressbar/dist/styles.css'
 import { useNavigate } from 'react-router-dom'
 
 export default function CreatePost() {
-    const { currentUser, loading } = useSelector(state => state.user)
+    const {  loading } = useSelector(state => state.user)
 
     const [imageFile, setImageFile] = useState(null)
     const [imageFileUrl, setImageFileUrl] = useState(null)
@@ -140,9 +140,11 @@ export default function CreatePost() {
                         }
                     >
                         <option value={'uncategorized'}>---Select---</option>
-                        <option value={'JavaScript'}>JavaScript</option>
-                        <option value={'ReactJS'}>ReactJS</option>
-                        <option value={'NextJS'}>NextJS</option>
+                        <option value={'Personal'}>Personal Blog</option>
+                        <option value={'Lifestyle'}>Lifestyle Blog</option>
+                        <option value={'Travel'}>Travel Blog</option>
+                        <option value={'Food'}>Food Blog</option>
+                        <option value={'Technology'}>Tech Blog</option>
                     </Select>
                 </div>
 

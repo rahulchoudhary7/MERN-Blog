@@ -4,7 +4,7 @@ import { FaUsers } from 'react-icons/fa'
 import { MdKeyboardDoubleArrowUp } from 'react-icons/md'
 import { FaCommentDots } from 'react-icons/fa'
 import { HiDocumentText } from 'react-icons/hi'
-import { Alert, Button, Table } from 'flowbite-react'
+import { Alert, Button, Spinner, Table } from 'flowbite-react'
 import { Link } from 'react-router-dom'
 
 export default function DashboardComp() {
@@ -18,12 +18,14 @@ export default function DashboardComp() {
     const [lastMonthPosts, setLastMonthPosts] = useState(0)
     const [lastMonthComments, setLastMonthComments] = useState(0)
     const [error, setError] = useState(null)
+    const [loading, setLoading] = useState(false)
 
     const { currentUser } = useSelector(state => state.user)
 
     useEffect(() => {
         const fetchUsers = async () => {
             setError(null)
+            setLoading(true)
             try {
                 const res = await fetch('/api/user/getusers?limit=5')
                 const data = await res.json()
@@ -32,14 +34,17 @@ export default function DashboardComp() {
                     setUsers(data.users)
                     setTotalUsers(data.totalUsers)
                     setLastMonthUsers(data.lastMonthUsers)
+                    setLoading(false)
                 }
             } catch (error) {
                 setError(error.message)
+                setLoading(false)
             }
         }
 
         const fetchPosts = async () => {
             setError(null)
+            setLoading(true)
             try {
                 const res = await fetch(`/api/post/getposts?limit=5`)
                 const data = await res.json()
@@ -48,14 +53,17 @@ export default function DashboardComp() {
                     setPosts(data.posts)
                     setLastMonthPosts(data.lastMonthPosts)
                     setTotalPosts(data.totalPosts)
+                    setLoading(false)
                 }
             } catch (error) {
                 setError(error.message)
+                setLoading(false)
             }
         }
 
         const fetchComments = async () => {
             setError(null)
+            setLoading(true)
             try {
                 const res = await fetch('/api/comments/getComments')
                 const data = await res.json()
@@ -64,9 +72,11 @@ export default function DashboardComp() {
                     setComments(data.comments)
                     setLastMonthComments(data.lastMonthComments)
                     setTotalComments(data.totalComments)
+                    setLoading(false)
                 }
             } catch (error) {
                 setError(error.message)
+                setLoading(false)
             }
         }
 
@@ -76,7 +86,12 @@ export default function DashboardComp() {
             fetchComments()
         }
     }, [currentUser._id])
-
+    if (loading)
+        return (
+            <div className='flex justify-center items-center min-h-screen w-full'>
+                <Spinner size={'xl'} />
+            </div>
+        )
     return (
         <>
             {error && (

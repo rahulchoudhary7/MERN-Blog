@@ -125,7 +125,7 @@ export default function Search() {
         category: 'uncategorized',
     })
 
-    console.log(sidebarData)
+
     const [posts, setPosts] = useState([])
     const [loading, setLoading] = useState(false)
     const [showMore, setShowMore] = useState(false)
@@ -218,7 +218,10 @@ export default function Search() {
     return (
         <div className='flex flex-col'>
             <div className='flex p-7 border-b w-full border-gray-500'>
-                <form className='flex flex-col sm:flex-row max-w-full gap-4 flex-grow justify-end' onSubmit={handleSubmit}>
+                <form
+                    className='flex flex-col sm:flex-row max-w-full gap-4 flex-grow justify-end'
+                    onSubmit={handleSubmit}
+                >
                     <div className='flex sm:flex-col  items-center gap-2'>
                         <label className='whitespace-nowrap font-semibold'>
                             Search Term:
@@ -249,21 +252,25 @@ export default function Search() {
                             value={sidebarData.category}
                             id='category'
                         >
-                            <option value='uncategorized'>Uncategorized</option>
-                            <option value='reactjs'>React.js</option>
-                            <option value='nextjs'>Next.js</option>
-                            <option value='javascript'>JavaScript</option>
+                            <option value={'uncategorized'}>
+                                ---Select---
+                            </option>
+                            <option value={'Personal'}>Personal Blog</option>
+                            <option value={'Lifestyle'}>Lifestyle Blog</option>
+                            <option value={'Travel'}>Travel Blog</option>
+                            <option value={'Food'}>Food Blog</option>
+                            <option value={'Technology'}>Tech Blog</option>
                         </Select>
                     </div>
-                        <div className='flex sm:flex-col items-center gap-2 mt-8'>
-                            <Button
-                                type='submit'
-                                outline
-                                gradientDuoTone='purpleToPink'
-                            >
-                                Apply Filters
-                            </Button>
-                        </div>
+                    <div className='flex sm:flex-col items-center gap-2 mt-8'>
+                        <Button
+                            type='submit'
+                            outline
+                            gradientDuoTone='purpleToPink'
+                        >
+                            Apply Filters
+                        </Button>
+                    </div>
                 </form>
             </div>
             <div className='w-full'>

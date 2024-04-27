@@ -176,9 +176,11 @@ export default function UpdatePost() {
                             <option value={'uncategorized'}>
                                 ---Select---
                             </option>
-                            <option value={'JavaScript'}>JavaScript</option>
-                            <option value={'ReactJS'}>ReactJS</option>
-                            <option value={'NextJS'}>NextJS</option>
+                            <option value={'Personal'}>Personal Blog</option>
+                            <option value={'Lifestyle'}>Lifestyle Blog</option>
+                            <option value={'Travel'}>Travel Blog</option>
+                            <option value={'Food'}>Food Blog</option>
+                            <option value={'Technology'}>Tech Blog</option>
                         </Select>
                     </div>
 

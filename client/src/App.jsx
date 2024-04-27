@@ -4,7 +4,7 @@ import About from './pages/About'
 import Signin from './pages/Signin'
 import Signup from './pages/Signup'
 import Dashboard from './pages/Dashboard'
-import Projects from './pages/Projects'
+import Posts from './pages/Posts'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import PrivateRoute from './components/PrivateRoute'
@@ -18,29 +18,30 @@ import Search from './pages/Search'
 export default function App() {
     return (
         <BrowserRouter>
-            <ScrollToTop/>
-                <Header />
-                <Routes>
+            <ScrollToTop />
+            <Header />
+            <Routes>               
+                <Route path='/signin' element={<Signin />} />
+                <Route path='/signup' element={<Signup />} />
+                <Route element={<PrivateRoute />}>
                     <Route path='/' element={<Home />} />
                     <Route path='/about' element={<About />} />
-                    <Route path='/signin' element={<Signin />} />
-                    <Route path='/signup' element={<Signup />} />
+                    <Route path='/dashboard' element={<Dashboard />} />
                     <Route path='/search' element={<Search />} />
-                    <Route element={<PrivateRoute />}>
-                        <Route path='/dashboard' element={<Dashboard />} />
-                    </Route>
-                    <Route element={<AdminPrivateRoute />}>
-                        <Route path='/create-post' element={<CreatePost />} />
-                        <Route
-                            path='/update-post/:postId'
-                            element={<UpdatePost />}
-                        />
-                    </Route>
-                    <Route path='/projects' element={<Projects />} />
+                    <Route path='/posts' element={<Posts />} />
                     <Route path='/post/:postSlug' element={<PostPage />} />
-                </Routes>
+                </Route>
+                <Route element={<AdminPrivateRoute />}>
+                    <Route path='/create-post' element={<CreatePost />} />
+                    <Route
+                        path='/update-post/:postId'
+                        element={<UpdatePost />}
+                    />
+                </Route>
+                
+            </Routes>
 
-                <Footer />
+            <Footer />
         </BrowserRouter>
     )
 }

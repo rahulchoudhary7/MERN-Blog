@@ -1,21 +1,36 @@
 import { Link, useNavigate } from 'react-router-dom'
-import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react'
+import {
+    Alert,
+    Button,
+    Checkbox,
+    Label,
+    Spinner,
+    TextInput,
+    Toast,
+} from 'flowbite-react'
 import { useState } from 'react'
 import {
     signInStart,
     signInSuccess,
     signInFailure,
+    alertDone,
+    setErrorNull,
 } from '../redux/user/userSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import OAuth from '../components/OAuth'
 import { RiCompassDiscoverFill } from 'react-icons/ri'
+import { HiCheck } from 'react-icons/hi'
 
 function Signin() {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false)
     const [password, setPassword] = useState('')
     const [email, setEmail] = useState('')
     const dispatch = useDispatch()
-    const { loading, error: errorMessage } = useSelector(state => state.user)
+    const {
+        loading,
+        error: errorMessage,
+        signoutMessage,
+    } = useSelector(state => state.user)
 
     const navigate = useNavigate()
 
@@ -60,6 +75,17 @@ function Signin() {
 
     return (
         <div className='min-h-screen mt-20'>
+            {signoutMessage && (
+                <Toast className='mx-auto mt-5'>
+                    <div className='inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200'>
+                        <HiCheck className='h-5 w-5' />
+                    </div>
+                    <div className='ml-3 text-sm font-normal'>
+                        {signoutMessage}
+                    </div>
+                    <Toast.Toggle onDismiss={() => dispatch(alertDone())} />
+                </Toast>
+            )}
             <div className='flex gap-5 p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center'>
                 {/* leftside */}
                 <div className='flex flex-col flex-1'>
@@ -67,14 +93,14 @@ function Signin() {
                         to={'/'}
                         className='font-bold dark:text-white flex justify-center items-center gap-2'
                     >
-                        <RiCompassDiscoverFill className=' text-red-500 h-16 w-16 ' />
-                        <span className='text-4xl font-bold'>
-                            CODECOMPASS
+                        <RiCompassDiscoverFill className=' text-red-500 h-14 w-14 ' />
+                        <span className='text-3xl font-bold'>
+                            NOMAD&apos;S NEXUS
                         </span>
                     </Link>
-                    <p className='text-sm mt-5 pl-4'>
-                        This is a demo project. You can sign up with your email
-                        and password or with Google
+                    <p className='text-lg mt-5 pl-4 text-center font-medium'>
+                        Welcome back! Sign in to continue exploring awesome
+                        contents
                     </p>
                 </div>
                 {/* rightside */}
@@ -105,16 +131,19 @@ function Signin() {
                                 }}
                             />
                             {password !== '' && (
-                                <label
-                                    onClick={() =>
-                                        setIsPasswordVisible(!isPasswordVisible)
-                                    }
-                                    className='text-sm text-blue-700 cursor-pointer '
-                                >
-                                    {isPasswordVisible
-                                        ? 'Hide Password'
-                                        : 'Show password'}
-                                </label>
+                                <div className='flex mt-2 gap-1'>
+                                    <Checkbox
+                                        onClick={() =>
+                                            setIsPasswordVisible(
+                                                !isPasswordVisible,
+                                            )
+                                        }
+                                    />
+
+                                    <label className='text-xs tex-gray-500 mr-5'>
+                                        Show Password
+                                    </label>
+                                </div>
                             )}
                         </div>
                         <Button
@@ -138,13 +167,17 @@ function Signin() {
                         <span>Don&apos;t have an account? </span>
                         <Link
                             to={'/signup'}
-                            className='text-blue-700 hover:text-blue-500'
+                            className='text-blue-700 hover:text-blue-500 font-medium'
                         >
                             Sign Up
                         </Link>
                     </div>
                     {errorMessage && (
-                        <Alert className='mt-5' color={'failure'}>
+                        <Alert
+                            className='mt-5'
+                            color={'failure'}
+                            onDismiss={() => dispatch(setErrorNull())}
+                        >
                             {errorMessage}
                         </Alert>
                     )}

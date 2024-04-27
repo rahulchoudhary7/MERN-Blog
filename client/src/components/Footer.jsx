@@ -21,7 +21,7 @@ export default function FooterCom() {
                         >
                             <RiCompassDiscoverFill className='text-red-500 h-10 w-10 ' />
                             <span className='text-xl font-bold'>
-                                CODECOMPASS
+                                NOMAD&apos;S NEXUS
                             </span>
                         </Link>
                     </div>

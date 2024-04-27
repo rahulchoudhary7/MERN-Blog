@@ -1,16 +1,21 @@
-import { Alert, Button, Spinner } from 'flowbite-react'
+import { Alert, Button, Modal, Spinner } from 'flowbite-react'
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import CallToAction from '../components/CallToAction'
 import CommentSection from '../components/CommentSection'
 import PostCard from '../components/PostCard'
+import { useSelector } from 'react-redux'
+import { HiOutlineExclamationCircle } from 'react-icons/hi'
 
 export default function PostPage() {
+    const { currentUser } = useSelector(state => state.user)
     const { postSlug } = useParams()
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
     const [post, setPost] = useState(null)
     const [recentPosts, setRecentPosts] = useState(null)
+    const [showModal, setShowModal] = useState(false)
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchPost = async () => {
@@ -77,6 +82,28 @@ export default function PostPage() {
         months[date.getMonth()]
     } ${String(date.getFullYear()).slice(2)}`
 
+    const handleDelete = async () => {
+        setShowModal(false)
+        setError(null)
+        try {
+            const res = await fetch(
+                `/api/post/deletepost/${post._id}/${currentUser._id}`,
+                {
+                    method: 'DELETE',
+                },
+            )
+            const data = await res.json()
+
+            if (!res.ok) {
+                setError(data.message)
+            } else {
+               navigate('/search')
+            }
+        } catch (error) {
+            setError(null)
+        }
+    }
+
     if (loading)
         return (
             <div className='flex justify-center items-center min-h-screen'>
@@ -98,6 +125,31 @@ export default function PostPage() {
                 <h1 className='text-3xl mt-10 p-3 text-center font-serif max-w-2xl mx-auto lg:text-4xl'>
                     {post && post.title}
                 </h1>
+                <div className=''>
+                    {post && currentUser && currentUser._id === post.userId && (
+                        <div className='w-full flex justify-center gap-2'>
+                            <Link to={`/update-post/${post._id}`}>
+                                <Button
+                                    className='text-md rounded-full'
+                                    color={'blue'}
+                                    size={'sm'}
+                                >
+                                    Edit Post
+                                </Button>
+                            </Link>
+                            <Button
+                                    className='text-md rounded-full'
+                                    color={'red'}
+                                    size={'sm'}
+                                    type='button'
+                                    onClick={()=>setShowModal(true)}
+                                >
+                                    Delete Post
+                                </Button>
+                            
+                        </div>
+                    )}
+                </div>
                 <Link
                     className='self-center mt-5'
                     to={`/search?category=${post && post.category}`}
@@ -122,6 +174,7 @@ export default function PostPage() {
                     className='p-3 max-w-6xl mx-auto post-content'
                     dangerouslySetInnerHTML={{ __html: post && post.content }}
                 ></div>
+
                 <div className='max-w-6xl mx-auto w-full'>
                     <CallToAction />
                 </div>
@@ -129,14 +182,43 @@ export default function PostPage() {
                 <div className='flex flex-col justify-center items-center mb-5 border-t-2'>
                     <h1 className='text-xl mt-5'>Recent articles</h1>
                     <div className='flex flex-wrap gap-5 mt-5 justify-center'>
-                        {
-                            recentPosts && 
-                                recentPosts.map((post)=>(
-                                    <PostCard key = {post._id} post = {post}/>
-                                ))
-                        }
+                        {recentPosts &&
+                            recentPosts.map(post => (
+                                <PostCard key={post._id} post={post} />
+                            ))}
                     </div>
                 </div>
+                <Modal
+                    show={showModal}
+                    onClose={() => setShowModal(false)}
+                    popup
+                    size={'md'}
+                >
+                    <Modal.Header />
+                    <Modal.Body>
+                        <div className='text-center'>
+                            <HiOutlineExclamationCircle className='h-14 w-14 color-gray-400 dark:text-gray-200 mb-4 mx-auto' />
+                            <h3 className='mb-5 text-lg text-gray-500 dark:text-gray-400'>
+                                Are you sure you want to delete this post?
+                            </h3>
+
+                            <div className='flex justify-center gap-7'>
+                                <Button
+                                    color={'failure'}
+                                    onClick={handleDelete}
+                                >
+                                    Yes, Delete
+                                </Button>
+                                <Button
+                                    color={'gray'}
+                                    onClick={() => setShowModal(false)}
+                                >
+                                    No, Cancel
+                                </Button>
+                            </div>
+                        </div>
+                    </Modal.Body>
+                </Modal>
             </main>
         </>
     )

@@ -35,7 +35,7 @@ export default function DashSidebar() {
             if (!res.ok) {
                 console.log(data.message)
             } else {
-                dispatch(signoutSuccess())
+                dispatch(signoutSuccess("Signed out successfully"))
             }
         } catch (error) {
             console.log(error.message)

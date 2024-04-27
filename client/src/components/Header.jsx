@@ -1,4 +1,4 @@
-import { Avatar, Button, Dropdown, Navbar, TextInput } from 'flowbite-react'
+import { Avatar, Button, Dropdown, Navbar, TextInput} from 'flowbite-react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { AiOutlineSearch } from 'react-icons/ai'
 import { FaMoon, FaSun } from 'react-icons/fa'
@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { toggleTheme } from '../redux/theme/themeSlice'
 import { signoutSuccess } from '../redux/user/userSlice'
 import { useEffect, useState } from 'react'
-import { RiCompassDiscoverFill } from "react-icons/ri";
+import { RiCompassDiscoverFill } from 'react-icons/ri'
 function Header() {
     const { currentUser } = useSelector(state => state.user)
     const { theme } = useSelector(state => state.theme)
@@ -14,7 +14,7 @@ function Header() {
     const [searchTerm, setSearchTerm] = useState('')
     const path = useLocation().pathname
     const location = useLocation()
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
 
     const handleSignout = async () => {
@@ -27,7 +27,7 @@ function Header() {
             if (!res.ok) {
                 console.log(data.message)
             } else {
-                dispatch(signoutSuccess())
+                dispatch(signoutSuccess("Signed out successfully"))
             }
         } catch (error) {
             console.log(error.message)
@@ -43,115 +43,117 @@ function Header() {
         }
     }, [location.search])
 
+    const handleSubmit = e => {
+        e.preventDefault()
 
-    const handleSubmit = (e)=>{
-        e.preventDefault();
-        
-        const  urlParams = new URLSearchParams(location.search)
+        const urlParams = new URLSearchParams(location.search)
         urlParams.set('searchTerm', searchTerm)
-        const searchQuery = urlParams.toString();
+        const searchQuery = urlParams.toString()
 
         navigate(`/search?${searchQuery}`)
     }
 
     return (
-        <Navbar className='border-b-2'>
-            <Link
-                to={'/'}
-                className='self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white flex items-center justify-center gap-2'
-            >
-                {/* <span className='px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to bg-pink-500 rounded-lg text-white'>
-                    Rahul&apos;s
-                </span>
-                Blog */}
-                <RiCompassDiscoverFill className='text-red-500 h-10 w-10 '/>
-                <span className='text-xl font-bold'>CODECOMPASS</span>
-            </Link>
-               
-            <form onSubmit={handleSubmit}>
-                <TextInput
-                    type='text'
-                    placeholder='Search...'
-                    rightIcon={AiOutlineSearch}
-                    className='hidden lg:inline'
-                    value={searchTerm}
-                    onChange={(e)=>setSearchTerm(e.target.value)}
-                />
-            </form>
-            <Button className='w-12 h-10 lg:hidden' color='gray' pill>
-                <AiOutlineSearch />
-            </Button>
-            <div className='flex gap-2 md:order-2'>
-                {theme === 'Light' ? (
-                    <Button
-                        className='w-12 h-10 hidden sm:inline'
-                        color='gray'
-                        pill
-                        onClick={() => dispatch(toggleTheme())}
-                    >
-                        <FaMoon />
-                    </Button>
-                ) : (
-                    <Button
-                        className='w-12 h-10 hidden sm:inline'
-                        color='gray'
-                        pill
-                        onClick={() => dispatch(toggleTheme())}
-                    >
-                        <FaSun />
-                    </Button>
-                )}
-                {currentUser ? (
-                    <Dropdown
-                        arrowIcon={false}
-                        inline
-                        label={
-                            <Avatar
-                                alt='user'
-                                img={currentUser.profilePicture}
-                                rounded
-                            />
-                        }
-                    >
-                        <Dropdown.Header>
-                            <span className='block text-sm'>
-                                {currentUser.username}
-                            </span>
-                            <span className='block text-sm truncate'>
-                                {currentUser.email}
-                            </span>
-                        </Dropdown.Header>
-                        <Link to={'/dashboard?tab=profile'}>
-                            <Dropdown.Item>Profile</Dropdown.Item>
-                        </Link>
-                        <Dropdown.Divider />
-                        <Dropdown.Item
-                            className='font-medium text-red-500 dark:text-red-500 '
-                            onClick={handleSignout}
-                        >
-                            Sign Out
-                        </Dropdown.Item>
-                    </Dropdown>
-                ) : (
-                    <Link to={'/signin'}>
-                        <Button gradientDuoTone='purpleToBlue'>Sign In</Button>
-                    </Link>
-                )}
+        <>
+            <Navbar className='border-b-2'>
+                <Link
+                    to={'/'}
+                    className='self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white flex items-center justify-center gap-2'
+                >
+                    
+                    <RiCompassDiscoverFill className='text-red-500 h-10 w-10 ' />
+                    <span className='text-xl font-bold'>
+                        NOMAD&apos;S NEXUS
+                    </span>
+                </Link>
 
-                <Navbar.Toggle />
-            </div>
-            <Navbar.Collapse>
-                <Navbar.Link active={path === '/'} as={'div'}>
-                    <Link to={'/'}>Home</Link>
-                </Navbar.Link>
-                <Navbar.Link active={path === '/about'} as={'div'}>
-                    <Link to={'/about'}>About</Link>
-                </Navbar.Link>
-                <Navbar.Link active={path === '/projects'} as={'div'}>
-                    <Link to={'/projects'}>Projects</Link>
-                </Navbar.Link>
-            </Navbar.Collapse>
-        </Navbar>
+                <form onSubmit={handleSubmit}>
+                    <TextInput
+                        type='text'
+                        placeholder='Search...'
+                        rightIcon={AiOutlineSearch}
+                        className='hidden lg:inline '
+                        value={searchTerm}
+                        onChange={e => setSearchTerm(e.target.value)}
+                    />
+                </form>
+                <Button className='w-12 h-10 lg:hidden' color='gray' pill>
+                    <AiOutlineSearch />
+                </Button>
+                <div className='flex gap-2 md:order-2'>
+                    {theme === 'Light' ? (
+                        <Button
+                            className='w-12 h-10 hidden sm:inline'
+                            color='gray'
+                            pill
+                            onClick={() => dispatch(toggleTheme())}
+                        >
+                            <FaMoon />
+                        </Button>
+                    ) : (
+                        <Button
+                            className='w-12 h-10 hidden sm:inline'
+                            color='gray'
+                            pill
+                            onClick={() => dispatch(toggleTheme())}
+                        >
+                            <FaSun />
+                        </Button>
+                    )}
+                    {currentUser ? (
+                        <Dropdown
+                            arrowIcon={false}
+                            inline
+                            label={
+                                <Avatar
+                                    alt='user'
+                                    img={currentUser.profilePicture}
+                                    rounded
+                                />
+                            }
+                        >
+                            <Dropdown.Header>
+                                <span className='block text-sm'>
+                                    {currentUser.username}
+                                </span>
+                                <span className='block text-sm truncate'>
+                                    {currentUser.email}
+                                </span>
+                            </Dropdown.Header>
+                            <Link to={'/dashboard?tab=profile'}>
+                                <Dropdown.Item>Profile</Dropdown.Item>
+                            </Link>
+                            <Dropdown.Divider />
+                            <Dropdown.Item
+                                className='font-medium text-red-500 dark:text-red-500 '
+                                onClick={handleSignout}
+                            >
+                                Sign Out
+                            </Dropdown.Item>
+                        </Dropdown>
+                    ) : (
+                        <Link to={'/signin'}>
+                            <Button gradientDuoTone='purpleToBlue'>
+                                Sign In
+                            </Button>
+                        </Link>
+                    )}
+
+                    <Navbar.Toggle />
+                </div>
+                <Navbar.Collapse>
+                    <Navbar.Link active={path === '/'} as={'div'}>
+                        <Link to={'/'}>Home</Link>
+                    </Navbar.Link>
+                    <Navbar.Link active={path === '/about'} as={'div'}>
+                        <Link to={'/about'}>About</Link>
+                    </Navbar.Link>
+                    <Navbar.Link active={path === '/posts'} as={'div'}>
+                        <Link to={'/posts'}>Posts</Link>
+                    </Navbar.Link>
+                </Navbar.Collapse>
+            </Navbar>
+        </>
     )
 }
 

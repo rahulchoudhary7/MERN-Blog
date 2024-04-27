@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { Alert, Button, Modal, Table } from 'flowbite-react'
-import { HiBadgeCheck } from 'react-icons/hi'
+import { Alert, Button, Modal, Spinner, Table, Toast } from 'flowbite-react'
+import { HiBadgeCheck, HiCheck } from 'react-icons/hi'
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
 import { MdAutoDelete } from 'react-icons/md'
 
@@ -12,22 +12,27 @@ export default function DashUsers() {
     const [showModal, setShowModal] = useState(false)
     const [userIdtoDelete, setUserIdToDelete] = useState(null)
     const [error, setError] = useState(null)
+    const [deleted, setDeleted] = useState(false)
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         const fetchUsers = async () => {
             setError(null)
+            setLoading(true)
             try {
                 const res = await fetch('/api/user/getusers')
                 const data = await res.json()
 
                 if (res.ok) {
                     setUsers(data.users)
+                    setLoading(false)
                     if (data.users.length < 9) {
                         setShowmore(false)
                     }
                 }
             } catch (error) {
                 setError(error.message)
+                setLoading(false)
             }
         }
 
@@ -39,6 +44,7 @@ export default function DashUsers() {
     const handleShowMore = async () => {
         const startIndex = users.length
         setError(null)
+        setLoading(true)
         try {
             const res = await fetch(
                 `/api/post/getusers?startIndex=${startIndex}`,
@@ -48,19 +54,22 @@ export default function DashUsers() {
 
             if (res.ok) {
                 setUsers(prev => [...prev, ...data.users])
+                setLoading(false)
 
                 if (data.users.length < 9) {
                     setShowmore(false)
                 }
             }
         } catch (error) {
-            setError(null)
+            setError(error)
+            setLoading(false)
         }
     }
 
     const handleDeleteUser = async () => {
         setShowModal(false)
         setError(null)
+        setLoading(true)
         try {
             const res = await fetch(`/api/user/delete/${userIdtoDelete}`, {
                 method: 'DELETE',
@@ -73,10 +82,13 @@ export default function DashUsers() {
                 setUsers(prev =>
                     prev.filter(user => user._id !== userIdtoDelete),
                 )
+                setLoading(false)
+                setDeleted(true)
             }
             setUserIdToDelete(null)
         } catch (error) {
-            setError(null)
+            setError(error)
+            setLoading(false)
         }
     }
     const formattedDate = user => {
@@ -99,10 +111,28 @@ export default function DashUsers() {
             date.getFullYear(),
         ).slice(2)}`
     }
+
+    if (loading)
+        return (
+            <div className='flex justify-center items-center min-h-screen w-full'>
+                <Spinner size={'xl'} />
+            </div>
+        )
     return (
         <div className='table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbarr-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-gray-500'>
             {currentUser.isAdmin && users.length > 0 ? (
                 <>
+                    {deleted && (
+                        <Toast className='mx-auto my-5'>
+                            <div className='inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200'>
+                                <HiCheck className='h-5 w-5' />
+                            </div>
+                            <div className='ml-3 text-sm font-normal'>
+                                User deleted successfully.
+                            </div>
+                            <Toast.Toggle onDismiss={() => setDeleted(false)} />
+                        </Toast>
+                    )}
                     <Table hoverable className='shadow-md'>
                         <Table.Head>
                             <Table.HeadCell>Date Created</Table.HeadCell>
