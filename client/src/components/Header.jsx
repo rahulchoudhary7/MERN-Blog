@@ -88,7 +88,7 @@ function Header() {
                             pill
                             onClick={() => dispatch(toggleTheme())}
                         >
-                            <FaMoon />
+                            <FaMoon className='my-auto'/>
                         </Button>
                     ) : (
                         <Button
@@ -97,7 +97,7 @@ function Header() {
                             pill
                             onClick={() => dispatch(toggleTheme())}
                         >
-                            <FaSun />
+                            <FaSun className='my-auto'/>
                         </Button>
                     )}
                     {currentUser ? (

@@ -93,10 +93,10 @@ export default function Home() {
                             <div className='mx-auto flex items-center'>
                                 <p className='flex flex-col items-center text-sm font-normal text-gray-700 dark:text-gray-400'>
                                    
-                                    <span className='[&_p]:inline'>
+                                    <span className='[&_p]:inline text-center'>
                                         {joke.setup}
                                     </span>
-                                    <span className='[&_p]:inline'>
+                                    <span className='[&_p]:inline text-center'>
                                         {joke.punchline} 😂
                                     </span>
                                 </p>
