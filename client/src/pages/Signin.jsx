@@ -8,7 +8,7 @@ import {
     TextInput,
     Toast,
 } from 'flowbite-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
     signInStart,
     signInSuccess,
@@ -33,6 +33,14 @@ function Signin() {
     } = useSelector(state => state.user)
 
     const navigate = useNavigate()
+
+    useEffect(()=>{
+        if(signoutMessage){
+            setTimeout(() => {
+                dispatch(alertDone())
+            }, 5000);
+        }
+    })
 
     const handleSubmit = async e => {
         e.preventDefault()

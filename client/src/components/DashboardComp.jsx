@@ -94,16 +94,16 @@ export default function DashboardComp() {
         )
     return (
         <>
-            {error && (
-                <Alert
-                    color={'failure'}
-                    className='mt-4'
-                    onDismiss={() => setError(null)}
-                >
-                    {error}
-                </Alert>
-            )}
             <div className='p-3 md:mx-auto'>
+                {error && (
+                    <Alert
+                        color={'failure'}
+                        className='my-5 max-w-2xl mx-auto'
+                        onDismiss={() => setError(null)}
+                    >
+                        {error}
+                    </Alert>
+                )}
                 <div className='flex-wrap flex gap-4 justify-center'>
                     <div className='flex flex-col p-3 dark:bg-slate-800 gap-4 md:w-72 w-full rounded-md shadow-md'>
                         <div className='flex justify-between'>

@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Banner, Toast } from 'flowbite-react'
 import { HiCheck, HiX } from 'react-icons/hi'
 import { alertDone } from '../redux/user/userSlice'
-import { FaFaceSmileWink } from 'react-icons/fa6'
 
 export default function Home() {
     const [posts, setPosts] = useState([])
@@ -68,15 +67,15 @@ export default function Home() {
                         Welcome to my Blog!
                     </h1>
                     <p className='text-gray-500 text-sm sm:text-md'>
-                        Welcome to our blog hub! 🚀 Get ready to explore a
+                        Welcome to my blog hub! 🚀 Get ready to explore a
                         diverse universe where we delve into personal
                         reflections, tantalizing culinary adventures,
                         cutting-edge tech insights, exhilarating travel
                         experiences, and vibrant lifestyle inspirations! Whether
-                        you're seeking heartfelt stories, mouthwatering recipes,
+                        you&apos;re seeking heartfelt stories, mouthwatering recipes,
                         the latest gadgets, wanderlust-worthy destinations, or
                         tips for living your best life, you&apos;re in the right
-                        place. Join us for a captivating journey through the
+                        place. Join me for a captivating journey through the
                         realms of personal growth, gastronomic delights,
                         technological innovations, globetrotting adventures, and
                         everyday inspiration. Let&apos;s embark on this enriching
