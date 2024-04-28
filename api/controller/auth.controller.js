@@ -55,6 +55,7 @@ export const signin = asyncHandler(async (req, res, next) => {
 
     res.cookie('accessToken', token, {
         httpOnly: true,
+        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     })
         .status(200)
         .json(rest)
@@ -73,6 +74,7 @@ export const google = asyncHandler(async (req, res, next) => {
         const { password, ...rest } = user._doc
         res.cookie('accessToken', token, {
             httpOnly: true,
+            expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         })
             .status(200)
             .json(rest)
@@ -99,6 +101,7 @@ export const google = asyncHandler(async (req, res, next) => {
         const { password, ...rest } = newUser._doc
         res.cookie('accessToken', token, {
             httpOnly: true,
+            expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         })
             .status(200)
             .json(rest)
