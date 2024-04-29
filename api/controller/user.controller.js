@@ -114,7 +114,6 @@ export const getusers = asyncHandler(async (req, res, next) => {
 export const getUser = asyncHandler(async (req, res, next) => {
     const user = await User.findById(req.params.userId)
 
-
     if (!user) {
         next(errorHandler(404, 'No users found'))
     }

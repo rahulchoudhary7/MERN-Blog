@@ -47,7 +47,7 @@ export default function DashUsers() {
         setLoading(true)
         try {
             const res = await fetch(
-                `/api/post/getusers?startIndex=${startIndex}`,
+                `/api/user/getusers?startIndex=${startIndex}`,
             )
 
             const data = await res.json()
